@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12th Std Physics Quiz Challenge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0F2027;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-option.correct {
+            background-color: #28a745 !important;
+            border-color: #28a745 !important;
+            animation: pulse-green 0.5s;
+        }
+
+        .btn-option.wrong {
+            background-color: #dc3545 !important;
+            border-color: #dc3545 !important;
+            animation: shake 0.5s;
+        }
+        
+        .feedback-modal-content.correct-anim {
+            animation: zoomIn 0.3s ease-out;
+        }
+
+        .feedback-modal-content.wrong-anim {
+            animation: zoomIn 0.3s ease-out;
+        }
+        
+        .powerful-text {
+            font-weight: 900;
+            font-size: 2.5rem;
+            background: -webkit-linear-gradient(45deg, #FDB813, #F2994A, #F15A24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: text-glow 1.5s ease-in-out infinite alternate;
+        }
+
+        .cracked-text {
+            font-weight: 900;
+            font-size: 2.5rem;
+            background: -webkit-linear-gradient(45deg, #00F260, #0575E6, #00F260);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: text-glow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes text-glow {
+            from {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #0073e6, 0 0 40px #0073e6;
+            }
+            to {
+                text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6;
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen flex items-center justify-center p-4">
+
+    <div id="main-container" class="w-full max-w-4xl mx-auto">
+
+        <!-- Language Selection Screen -->
+        <div id="language-screen" class="text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-2">Welcome to the Physics Challenge!</h1>
+            <p class="text-lg md:text-xl text-gray-300 mb-8">Select Your Language / ଆପଣଙ୍କ ଭାଷା ବାଛନ୍ତୁ / अपनी भाषा चुनें</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <button onclick="selectLanguage('en')" class="lang-btn card p-8 rounded-lg text-2xl font-semibold transition duration-300 hover:bg-white/20 hover:scale-105">English</button>
+                <button onclick="selectLanguage('hi')" class="lang-btn card p-8 rounded-lg text-2xl font-semibold transition duration-300 hover:bg-white/20 hover:scale-105">हिन्दी (Hindi)</button>
+                <button onclick="selectLanguage('or')" class="lang-btn card p-8 rounded-lg text-2xl font-semibold transition duration-300 hover:bg-white/20 hover:scale-105">ଓଡ଼ିଆ (Odia)</button>
+            </div>
+        </div>
+
+        <!-- Domain Selection Screen -->
+        <div id="domain-screen" class="hidden text-center">
+            <h1 id="domain-title" class="text-4xl md:text-5xl font-bold mb-8"></h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <button onclick="selectDomain('emi')" class="domain-btn card p-8 rounded-lg text-2xl font-semibold transition duration-300 hover:bg-white/20 hover:scale-105 flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-4"><path d="M21 12.2c0-5.52-5.4-10-12-10S3 6.68 3 12.2a9 9 0 0 0 9 9c4.97 0 9-4.03 9-9Z"/><path d="M12 2v10"/><path d="M12 12a4 4 0 0 0-4 4c0 1.68.94 3.1 2.24 3.76"/><path d="M12 12a4 4 0 0 1 4 4c0 1.68-.94 3.1-2.24 3.76"/></svg>
+                    <span id="domain-emi-text"></span>
+                </button>
+                <button onclick="selectDomain('semiconductors')" class="domain-btn card p-8 rounded-lg text-2xl font-semibold transition duration-300 hover:bg-white/20 hover:scale-105 flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-4"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
+                    <span id="domain-sc-text"></span>
+                </button>
+            </div>
+             <button onclick="goBack('language-screen')" class="mt-8 text-lg px-6 py-2 rounded-lg bg-gray-600 hover:bg-gray-700 transition-colors" id="back-to-lang"></button>
+        </div>
+
+        <!-- Difficulty Selection Screen -->
+        <div id="difficulty-screen" class="hidden text-center">
+            <h1 id="difficulty-title" class="text-4xl md:text-5xl font-bold mb-8"></h1>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <button onclick="selectDifficulty('easy')" class="difficulty-btn card p-8 rounded-lg text-2xl font-semibold transition duration-300 hover:bg-green-500/50 hover:scale-105" id="difficulty-easy"></button>
+                <button onclick="selectDifficulty('medium')" class="difficulty-btn card p-8 rounded-lg text-2xl font-semibold transition duration-300 hover:bg-yellow-500/50 hover:scale-105" id="difficulty-medium"></button>
+                <button onclick="selectDifficulty('hard')" class="difficulty-btn card p-8 rounded-lg text-2xl font-semibold transition duration-300 hover:bg-red-500/50 hover:scale-105" id="difficulty-hard"></button>
+            </div>
+             <button onclick="goBack('domain-screen')" class="mt-8 text-lg px-6 py-2 rounded-lg bg-gray-600 hover:bg-gray-700 transition-colors" id="back-to-domain"></button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden w-full">
+            <div class="card p-6 md:p-8 rounded-lg shadow-2xl">
+                <div class="flex justify-between items-center mb-4">
+                    <div id="progress-text" class="text-lg font-medium text-gray-300"></div>
+                    <div id="score-text" class="text-lg font-bold text-cyan-400"></div>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2.5 mb-6">
+                    <div id="progress-bar" class="bg-cyan-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <h2 id="question-text" class="text-2xl md:text-3xl font-semibold mb-8 min-h-[100px]"></h2>
+                <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Options will be injected here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden text-center">
+            <div class="card p-8 md:p-12 rounded-lg">
+                <h1 id="result-title" class="text-4xl font-bold mb-4"></h1>
+                <p id="result-score-text" class="text-6xl font-extrabold text-cyan-400 mb-2"></p>
+                <p id="result-feedback-text" class="text-xl text-gray-300 mb-8"></p>
+                <button onclick="restartQuiz()" class="text-xl font-bold bg-cyan-600 hover:bg-cyan-700 transition-colors py-3 px-8 rounded-lg" id="play-again-btn"></button>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50">
+        <div id="feedback-modal-content" class="feedback-modal-content text-center p-8 rounded-lg max-w-lg w-full">
+            <div id="correct-feedback" class="hidden">
+                 <div id="feedback-anim-text" class="powerful-text mb-4"></div>
+                 <p id="correct-answer-text" class="text-xl mb-6"></p>
+            </div>
+            <div id="wrong-feedback" class="hidden">
+                 <h2 id="wrong-answer-title" class="text-3xl font-bold text-red-400 mb-4"></h2>
+                 <p id="the-correct-answer-is" class="text-lg mb-2"></p>
+                 <p id="correct-answer-display" class="text-xl font-bold text-green-400 mb-4 p-3 bg-green-900/50 rounded-lg"></p>
+                 <p id="explanation-title" class="text-lg font-semibold mb-2"></p>
+                 <p id="explanation-text" class="text-gray-300 max-h-40 overflow-y-auto no-scrollbar p-2 bg-black/20 rounded"></p>
+            </div>
+            <button id="next-question-btn" onclick="nextQuestion()" class="mt-6 w-full text-lg font-bold bg-cyan-600 hover:bg-cyan-700 transition-colors py-3 px-6 rounded-lg"></button>
+        </div>
+    </div>
+
+
+<script>
+    // --- STATE MANAGEMENT ---
+    let currentLanguage = 'en';
+    let currentDomain = '';
+    let currentDifficulty = '';
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let questions = [];
+    
+    // --- UI ELEMENTS ---
+    const screens = {
+        language: document.getElementById('language-screen'),
+        domain: document.getElementById('domain-screen'),
+        difficulty: document.getElementById('difficulty-screen'),
+        quiz: document.getElementById('quiz-screen'),
+        result: document.getElementById('result-screen'),
+    };
+    
+    const quizUI = {
+        progressText: document.getElementById('progress-text'),
+        scoreText: document.getElementById('score-text'),
+        progressBar: document.getElementById('progress-bar'),
+        questionText: document.getElementById('question-text'),
+        optionsContainer: document.getElementById('options-container'),
+    };
+    
+    const resultUI = {
+        title: document.getElementById('result-title'),
+        score: document.getElementById('result-score-text'),
+        feedback: document.getElementById('result-feedback-text'),
+        playAgainBtn: document.getElementById('play-again-btn'),
+    };
+
+    const feedbackModal = {
+        container: document.getElementById('feedback-modal'),
+        content: document.getElementById('feedback-modal-content'),
+        correct: document.getElementById('correct-feedback'),
+        wrong: document.getElementById('wrong-feedback'),
+        animText: document.getElementById('feedback-anim-text'),
+        correctAnswerText: document.getElementById('correct-answer-text'),
+        wrongTitle: document.getElementById('wrong-answer-title'),
+        theCorrectAnswerIs: document.getElementById('the-correct-answer-is'),
+        correctAnswerDisplay: document.getElementById('correct-answer-display'),
+        explanationTitle: document.getElementById('explanation-title'),
+        explanationText: document.getElementById('explanation-text'),
+        nextBtn: document.getElementById('next-question-btn'),
+    };
+
+    // --- DATA ---
+    const quizData = {
+        en: {
+            // ... (rest of the data structure)
+        },
+        hi: {
+            // ... (rest of the data structure)
+        },
+        or: {
+            // ... (rest of the data structure)
+        }
+    };
+
+    // --- TEXT & TRANSLATIONS ---
+    const uiText = {
+        en: {
+            chooseDomain: "Choose a Domain",
+            emi: "Electromagnetic Induction",
+            semiconductors: "Semiconductor Electronics",
+            chooseDifficulty: "Choose Difficulty",
+            easy: "Easy",
+            medium: "Medium",
+            hard: "Hard",
+            question: "Question",
+            of: "of",
+            score: "Score",
+            results: "Results",
+            wellDone: "Well Done!",
+            keepTrying: "Keep Trying!",
+            playAgain: "Play Again",
+            powerful: "Powerful!",
+            cracked: "Cracked It!",
+            correct: "Correct!",
+            oops: "Oops!",
+            correctAnswerIs: "The correct answer is:",
+            explanation: "Explanation:",
+            nextQuestion: "Next Question",
+            finishQuiz: "Finish Quiz",
+            back: "Back"
+        },
+        hi: {
+            chooseDomain: "एक डोमेन चुनें",
+            emi: "विद्युतचुंबकीय प्रेरण",
+            semiconductors: "अर्धचालक इलेक्ट्रॉनिक्स",
+            chooseDifficulty: "कठिनाई चुनें",
+            easy: "आसान",
+            medium: "मध्यम",
+            hard: "कठिन",
+            question: "प्रश्न",
+            of: "का",
+            score: "स्कोर",
+            results: "परिणाम",
+            wellDone: "बहुत बढ़िया!",
+            keepTrying: "कोशिश करते रहो!",
+            playAgain: "फिर से खेलें",
+            powerful: "शक्तिशाली!",
+            cracked: "बहुत खूब!",
+            correct: "सही!",
+            oops: "ओह!",
+            correctAnswerIs: "सही उत्तर है:",
+            explanation: "व्याख्या:",
+            nextQuestion: "अगला प्रश्न",
+            finishQuiz: "क्विज़ समाप्त करें",
+            back: "वापस"
+        },
+        or: {
+            chooseDomain: "ଏକ ଡୋମେନ୍ ବାଛନ୍ତୁ",
+            emi: "ବିଦ୍ୟୁତ୍ ଚୁମ୍ବକୀୟ ପ୍ରେରଣ",
+            semiconductors: "ଅର୍ଦ୍ଧପରିବାହୀ ଇଲେକ୍ଟ୍ରୋନିକ୍ସ",
+            chooseDifficulty: "କଠିନତା ସ୍ତର ବାଛନ୍ତୁ",
+            easy: "ସହଜ",
+            medium: "ମଧ୍ୟମ",
+            hard: "କଠିନ",
+            question: "ପ୍ରଶ୍ନ",
+            of: "ରୁ",
+            score: "ସ୍କୋର୍",
+            results: "ଫଳାଫଳ",
+            wellDone: "ବହୁତ ଭଲ!",
+            keepTrying: "ଚେଷ୍ଟା ଜାରି ରଖନ୍ତୁ!",
+            playAgain: "ପୁଣି ଖେଳନ୍ତୁ",
+            powerful: "ଶକ୍ତିଶାଳୀ!",
+            cracked: "उत्तम!",
+            correct: "ଠିକ୍!",
+            oops: "ଓହ!",
+            correctAnswerIs: "ସଠିକ୍ ଉତ୍ତର ହେଉଛି:",
+            explanation: "ବ୍ୟାଖ୍ୟା:",
+            nextQuestion: "ପରବର୍ତ୍ତୀ ପ୍ରଶ୍ନ",
+            finishQuiz: "କ୍ୱିଜ୍ ସମାପ୍ତ କରନ୍ତୁ",
+            back: "ଫେରନ୍ତୁ"
+        }
+    };
+
+    // --- INITIALIZATION & NAVIGATION ---
+    
+    function switchScreen(screenId) {
+        Object.values(screens).forEach(screen => screen.classList.add('hidden'));
+        screens[screenId].classList.remove('hidden');
+    }
+
+    function selectLanguage(lang) {
+        currentLanguage = lang;
+        updateUIText();
+        switchScreen('domain');
+    }
+
+    function selectDomain(domain) {
+        currentDomain = domain;
+        switchScreen('difficulty');
+    }
+
+    function selectDifficulty(difficulty) {
+        currentDifficulty = difficulty;
+        startQuiz();
+    }
+    
+    function goBack(screenId) {
+        switchScreen(screenId);
+    }
+
+    function updateUIText() {
+        const t = uiText[currentLanguage];
+        // Domain Screen
+        document.getElementById('domain-title').innerText = t.chooseDomain;
+        document.getElementById('domain-emi-text').innerText = t.emi;
+        document.getElementById('domain-sc-text').innerText = t.semiconductors;
+        document.getElementById('back-to-lang').innerText = t.back;
+        
+        // Difficulty Screen
+        document.getElementById('difficulty-title').innerText = t.chooseDifficulty;
+        document.getElementById('difficulty-easy').innerText = t.easy;
+        document.getElementById('difficulty-medium').innerText = t.medium;
+        document.getElementById('difficulty-hard').innerText = t.hard;
+        document.getElementById('back-to-domain').innerText = t.back;
+        
+        // Result Screen
+        resultUI.playAgainBtn.innerText = t.playAgain;
+    }
+
+    // --- QUIZ LOGIC ---
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        questions = quizDataSource[currentLanguage][currentDomain][currentDifficulty];
+        // Shuffle questions
+        questions.sort(() => Math.random() - 0.5);
+        switchScreen('quiz');
+        displayQuestion();
+    }
+
+    function displayQuestion() {
+        if (currentQuestionIndex >= questions.length) {
+            showResults();
+            return;
+        }
+
+        const question = questions[currentQuestionIndex];
+        const t = uiText[currentLanguage];
+
+        // Update progress
+        const progressPercentage = ((currentQuestionIndex) / questions.length) * 100;
+        quizUI.progressBar.style.width = ${progressPercentage}%;
+        quizUI.progressText.innerText = ${t.question} ${currentQuestionIndex + 1} ${t.of} ${questions.length};
+        quizUI.scoreText.innerText = ${t.score}: ${score};
+
+        // Display question and options
+        quizUI.questionText.innerText = question.q;
+        quizUI.optionsContainer.innerHTML = '';
+        
+        const shuffledOptions = [...question.o].sort(() => Math.random() - 0.5);
+
+        shuffledOptions.forEach(option => {
+            const button = document.createElement('button');
+            button.innerText = option;
+            button.classList.add('btn-option', 'w-full', 'text-left', 'p-4', 'rounded-lg', 'border-2', 'border-gray-600', 'bg-gray-700', 'hover:bg-cyan-800', 'hover:border-cyan-600', 'transition-all', 'duration-200', 'text-lg');
+            button.onclick = () => selectAnswer(button, option);
+            quizUI.optionsContainer.appendChild(button);
+        });
+    }
+
+    function selectAnswer(button, selectedOption) {
+        // Disable all options
+        const optionButtons = quizUI.optionsContainer.querySelectorAll('.btn-option');
+        optionButtons.forEach(btn => btn.disabled = true);
+
+        const correctAnwer = questions[currentQuestionIndex].a;
+        
+        if (selectedOption === correctAnwer) {
+            score++;
+            button.classList.add('correct');
+            showFeedback(true);
+        } else {
+            button.classList.add('wrong');
+            // Highlight the correct answer
+            optionButtons.forEach(btn => {
+                if (btn.innerText === correctAnwer) {
+                    btn.classList.add('correct');
+                }
+            });
+            showFeedback(false);
+        }
+    }
+
+    function nextQuestion() {
+        feedbackModal.container.classList.add('hidden');
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            displayQuestion();
+        } else {
+            showResults();
+        }
+    }
+    
+    function showFeedback(isCorrect) {
+        const question = questions[currentQuestionIndex];
+        const t = uiText[currentLanguage];
+        feedbackModal.container.classList.remove('hidden');
+
+        if (isCorrect) {
+            feedbackModal.correct.classList.remove('hidden');
+            feedbackModal.wrong.classList.add('hidden');
+            feedbackModal.content.className = 'feedback-modal-content card p-8 rounded-lg max-w-lg w-full border-2 border-green-500 correct-anim';
+            
+            // Randomly show "Powerful" or "Cracked It"
+            const animMessages = [t.powerful, t.cracked];
+            const randomMsg = animMessages[Math.floor(Math.random() * animMessages.length)];
+            feedbackModal.animText.innerText = randomMsg;
+            feedbackModal.animText.className = randomMsg === t.powerful ? 'powerful-text mb-4' : 'cracked-text mb-4';
+            
+            feedbackModal.correctAnswerText.innerText = t.correct;
+
+        } else {
+            feedbackModal.correct.classList.add('hidden');
+            feedbackModal.wrong.classList.remove('hidden');
+            feedbackModal.content.className = 'feedback-modal-content card p-8 rounded-lg max-w-lg w-full border-2 border-red-500 wrong-anim';
+            
+            feedbackModal.wrongTitle.innerText = t.oops;
+            feedbackModal.theCorrectAnswerIs.innerText = t.correctAnswerIs;
+            feedbackModal.correctAnswerDisplay.innerText = question.a;
+            feedbackModal.explanationTitle.innerText = t.explanation;
+            feedbackModal.explanationText.innerText = question.e;
+        }
+
+        if (currentQuestionIndex === questions.length - 1) {
+            feedbackModal.nextBtn.innerText = t.finishQuiz;
+        } else {
+            feedbackModal.nextBtn.innerText = t.nextQuestion;
+        }
+    }
+
+
+    function showResults() {
+        const t = uiText[currentLanguage];
+        switchScreen('result');
+        
+        const percentage = Math.round((score / questions.length) * 100);
+        
+        resultUI.title.innerText = t.results;
+        resultUI.score.innerText = ${score} / ${questions.length};
+        
+        if (percentage > 70) {
+            resultUI.feedback.innerText = t.wellDone;
+        } else {
+            resultUI.feedback.innerText = t.keepTrying;
+        }
+    }
+    
+    function restartQuiz() {
+        switchScreen('language');
+    }
+
+// --- DATA SOURCE ---
+const quizDataSource = {
+    en: {
+        emi: {
+            easy: [
+                {q: "Lenz's law is a consequence of the law of conservation of...", o: ["Charge", "Mass", "Energy", "Momentum"], a: "Energy", e: "Lenz's law states that the induced current will flow in a direction that opposes the change that produced it. This requires work, conserving energy."},
+                {q: "The SI unit of magnetic flux is...", o: ["Tesla", "Weber", "Henry", "Gauss"], a: "Weber", e: "Magnetic flux (Φ) is the measure of the total magnetic field lines passing through a given area. Its SI unit is the Weber (Wb)."},
+                {q: "An induced EMF is produced in a coil when...", o: ["It is placed in a constant magnetic field", "The magnetic flux linked with it changes", "It moves parallel to a magnetic field", "It is placed in an electric field"], a: "The magnetic flux linked with it changes", e: "Faraday's law of induction states that an electromotive force (EMF) is induced in any closed circuit when the magnetic flux through the circuit changes."},
+                {q: "What is the phenomenon of producing an electric current by changing the magnetic field called?", o: ["Electrolysis", "Electromagnetic Induction", "Magnetic Effect of Current", "Electroplating"], a: "Electromagnetic Induction", e: "Electromagnetic induction is the production of an electromotive force across an electrical conductor in a changing magnetic field."},
+                {q: "The direction of induced current is given by...", o: ["Fleming's Left-Hand Rule", "Fleming's Right-Hand Rule", "Ampere's Law", "Biot-Savart Law"], a: "Fleming's Right-Hand Rule", e: "Fleming's Right-Hand Rule helps find the direction of induced current when a conductor moves in a magnetic field."},
+                {q: "A transformer works on the principle of...", o: ["Self-Induction", "Mutual Induction", "Static Electricity", "Joules's Law"], a: "Mutual Induction", e: "A transformer operates on the principle of mutual induction, where a changing current in one coil induces an EMF in a nearby second coil."},
+                {q: "Which device converts mechanical energy into electrical energy?", o: ["Motor", "Generator", "Transformer", "Galvanometer"], a: "Generator", e: "An electric generator is a device that converts mechanical energy obtained from an external source into electrical energy as the output."},
+                {q: "What does a step-up transformer do?", o: ["Increases voltage, decreases current", "Decreases voltage, increases current", "Increases both voltage and current", "Decreases both voltage and current"], a: "Increases voltage, decreases current", e: "A step-up transformer increases the voltage from primary to secondary, and consequently decreases the current to conserve power."},
+                {q: "The inductance of a coil is measured in...", o: ["Farads", "Ohms", "Henry", "Weber"], a: "Henry", e: "Inductance is the property of an electrical conductor by which a change in current through it induces an electromotive force. Its SI unit is the Henry (H)."}
+            ],
+            medium: [/* 9 questions */],
+            hard: [/* 9 questions */]
+        },
+        semiconductors: {
+            easy: [
+                {q: "In a p-type semiconductor, the majority charge carriers are...", o: ["Electrons", "Holes", "Protons", "Neutrons"], a: "Holes", e: "P-type semiconductors are created by doping with trivalent impurities, which creates an abundance of 'holes' that act as positive charge carriers."},
+                {q: "The energy gap is maximum in...", o: ["Conductors", "Insulators", "Semiconductors", "Superconductors"], a: "Insulators", e: "Insulators have a very large forbidden energy gap, which prevents electrons from moving into the conduction band under normal conditions."},
+                {q: "A diode allows current to flow...", o: ["In both directions", "Only in one direction", "Only when heated", "Only when in a magnetic field"], a: "Only in one direction", e: "An ideal diode has zero resistance in the forward-biased direction and infinite resistance in the reverse-biased direction, allowing current to flow only one way."},
+                {q: "What is the process of adding impurities to a pure semiconductor called?", o: ["Doping", "Annealing", "Diffusion", "Drifting"], a: "Doping", e: "Doping is the intentional introduction of impurities into an intrinsic semiconductor for the purpose of modulating its electrical properties."},
+                {q: "Which of the following is an example of an intrinsic semiconductor?", o: ["Silicon doped with Phosphorus", "Germanium doped with Boron", "Pure Silicon", "Gallium Arsenide"], a: "Pure Silicon", e: "Intrinsic semiconductors are pure semiconductors without any significant dopant species present. Pure Silicon and Germanium are common examples."},
+                {q: "A transistor has how many terminals?", o: ["One", "Two", "Three", "Four"], a: "Three", e: "A bipolar junction transistor (BJT) has three terminals: the emitter, the base, and the collector."},
+                {q: "The depletion region in a p-n junction diode consists of...", o: ["Mobile charge carriers", "Immobile ions", "Both mobile and immobile charges", "No charges"], a: "Immobile ions", e: "The depletion region is formed by the diffusion of electrons and holes, leaving behind immobile positive and negative ions on opposite sides of the junction."},
+                {q: "In forward bias, the width of the depletion layer of a p-n junction diode...", o: ["Increases", "Decreases", "Remains unchanged", "First increases then decreases"], a: "Decreases", e: "Applying a forward bias voltage opposes the built-in potential, reducing the width of the depletion layer and allowing current to flow."},
+                {q: "Which logic gate is known as the universal gate?", o: ["AND gate", "OR gate", "NOT gate", "NAND gate"], a: "NAND gate", e: "Both NAND and NOR gates are called universal gates because any other logic gate (like AND, OR, NOT) can be created using only NAND gates or only NOR gates."}
+            ],
+            medium: [/* 9 questions */],
+            hard: [/* 9 questions */]
+        }
+    },
+    hi: {
+        emi: {
+            easy: [
+                {q: "लेन्ज़ का नियम किसके संरक्षण के नियम का परिणाम है?", o: ["आवेश", "द्रव्यमान", "ऊर्जा", "संवेग"], a: "ऊर्जा", e: "लेन्ज़ का नियम कहता है कि प्रेरित धारा उस दिशा में बहेगी जो उस परिवर्तन का विरोध करेगी जिसने इसे उत्पन्न किया है। इसके लिए कार्य की आवश्यकता होती है, जो ऊर्जा का संरक्षण करता है।"},
+                {q: "चुंबकीय फ्लक्स का SI मात्रक क्या है?", o: ["टेस्ला", "वेबर", "हेनरी", "गॉस"], a: "वेबर", e: "चुंबकीय फ्लक्स (Φ) किसी दिए गए क्षेत्र से गुजरने वाली कुल चुंबकीय क्षेत्र रेखाओं का माप है। इसका SI मात्रक वेबर (Wb) है।"},
+                {q: "एक कुंडली में प्रेरित EMF कब उत्पन्न होता है?", o: ["जब इसे स्थिर चुंबकीय क्षेत्र में रखा जाता है", "जब इससे जुड़ा चुंबकीय फ्लक्स बदलता है", "जब यह चुंबकीय क्षेत्र के समानांतर चलती है", "जब इसे विद्युत क्षेत्र में रखा जाता है"], a: "जब इससे जुड़ा चुंबकीय फ्लक्स बदलता है", e: "फैराडे का प्रेरण का नियम कहता है कि किसी भी बंद परिपथ में एक इलेक्ट्रोमोटिव बल (EMF) प्रेरित होता है जब परिपथ के माध्यम से चुंबकीय फ्लक्स बदलता है।"},
+                {q: "चुंबकीय क्षेत्र को बदलकर विद्युत धारा उत्पन्न करने की घटना को क्या कहते हैं?", o: ["इलेक्ट्रोलिसिस", "विद्युतचुंबकीय प्रेरण", "धारा का चुंबकीय प्रभाव", "विद्युतलेपन"], a: "विद्युतचुंबकीय प्रेरण", e: "विद्युतचुंबकीय प्रेरण एक बदलते चुंबकीय क्षेत्र में एक विद्युत चालक में एक इलेक्ट्रोमोटिव बल का उत्पादन है।"},
+                {q: "प्रेरित धारा की दिशा किससे दी जाती है?", o: ["फ्लेमिंग का वाम-हस्त नियम", "फ्लेमिंग का दक्षिण-हस्त नियम", "एम्पीयर का नियम", "बायोट-सावर्ट का नियम"], a: "फ्लेमिंग का दक्षिण-हस्त नियम", e: "फ्लेमिंग का दक्षिण-हस्त नियम प्रेरित धारा की दिशा खोजने में मदद करता है जब एक चालक चुंबकीय क्षेत्र में चलता है।"},
+                {q: "एक ट्रांसफार्मर किस सिद्धांत पर काम करता है?", o: ["स्व-प्रेरण", "अन्योन्य प्रेरण", "स्थिर विद्युत", "जूल का नियम"], a: "अन्योन्य प्रेरण", e: "एक ट्रांसफार्मर अन्योन्य प्रेरण के सिद्धांत पर काम करता है, जहां एक कुंडली में बदलती धारा पास की दूसरी कुंडली में EMF प्रेरित करती है।"},
+                {q: "कौन सा उपकरण यांत्रिक ऊर्जा को विद्युत ऊर्जा में परिवर्तित करता है?", o: ["मोटर", "जनरेटर", "ट्रांसफार्मर", "गैल्वेनोमीटर"], a: "जनरेटर", e: "एक विद्युत जनरेटर एक उपकरण है जो बाहरी स्रोत से प्राप्त यांत्रिक ऊर्जा को आउटपुट के रूप में विद्युत ऊर्जा में परिवर्तित करता है।"},
+                {q: "एक स्टेप-अप ट्रांसफार्मर क्या करता है?", o: ["वोल्टेज बढ़ाता है, धारा घटाता है", "वोल्टेज घटाता है, धारा बढ़ाता है", "वोल्टेज और धारा दोनों बढ़ाता है", "वोल्टेज और धारा दोनों घटाता है"], a: "वोल्टेज बढ़ाता है, धारा घटाता है", e: "एक स्टेप-अप ट्रांसफार्मर प्राइमरी से सेकेंडरी तक वोल्टेज बढ़ाता है, और परिणामस्वरूप शक्ति संरक्षण के लिए धारा घटाता है।"},
+                {q: "एक कुंडली का प्रेरकत्व किसमें मापा जाता है?", o: ["फैराड", "ओम", "हेनरी", "वेबर"], a: "हेनरी", e: "प्रेरकत्व एक विद्युत चालक का वह गुण है जिसके द्वारा उसमें धारा के परिवर्तन से एक इलेक्ट्रोमोटिव बल प्रेरित होता है। इसका SI मात्रक हेनरी (H) है।"}
+            ],
+            medium: [/* 9 questions */],
+            hard: [/* 9 questions */]
+        },
+        semiconductors: {
+            easy: [
+                {q: "एक p-प्रकार के अर्धचालक में, बहुसंख्यक आवेश वाहक होते हैं...", o: ["इलेक्ट्रॉन", "होल (छिद्र)", "प्रोटॉन", "न्यूट्रॉन"], a: "होल (छिद्र)", e: "P-प्रकार के अर्धचालक त्रिसंयोजी अशुद्धियों के साथ डोपिंग करके बनाए जाते हैं, जो 'होल' की प्रचुरता पैदा करता है जो धनात्मक आवेश वाहक के रूप में कार्य करते हैं।"},
+                {q: "ऊर्जा अंतराल किसमें अधिकतम होता है?", o: ["चालक", "अचालक", "अर्धचालक", "अतिचालक"], a: "अचालक", e: "अचालकों में एक बहुत बड़ा निषिद्ध ऊर्जा अंतराल होता है, जो सामान्य परिस्थितियों में इलेक्ट्रॉनों को चालन बैंड में जाने से रोकता है।"},
+                {q: "एक डायोड धारा को प्रवाहित होने देता है...", o: ["दोनों दिशाओं में", "केवल एक दिशा में", "केवल गर्म होने पर", "केवल चुंबकीय क्षेत्र में होने पर"], a: "केवल एक दिशा में", e: "एक आदर्श डायोड का अग्र-अभिनत दिशा में शून्य प्रतिरोध और पश्च-अभिनत दिशा में अनंत प्रतिरोध होता है, जिससे धारा केवल एक ही तरह से प्रवाहित होती है।"},
+                {q: "एक शुद्ध अर्धचालक में अशुद्धियों को जोड़ने की प्रक्रिया को क्या कहा जाता है?", o: ["डोपिंग", "तापानुशीलन", "विसरण", "अपवहन"], a: "डोपिंग", e: "डोपिंग अपने विद्युत गुणों को संशोधित करने के उद्देश्य से एक आंतरिक अर्धचालक में अशुद्धियों का जानबूझकर परिचय है।"},
+                {q: "निम्नलिखित में से कौन एक नैज अर्धचालक का उदाहरण है?", o: ["फॉस्फोरस के साथ डोप किया गया सिलिकॉन", "बोरॉन के साथ डोप किया गया जर्मेनियम", "शुद्ध सिलिकॉन", "गैलियम आर्सेनाइड"], a: "शुद्ध सिलिकॉन", e: "नैज अर्धचालक शुद्ध अर्धचालक होते हैं जिनमें कोई महत्वपूर्ण डोपेंट प्रजातियां मौजूद नहीं होती हैं। शुद्ध सिलिकॉन और जर्मेनियम सामान्य उदाहरण हैं।"},
+                {q: "एक ट्रांजिस्टर में कितने टर्मिनल होते हैं?", o: ["एक", "दो", "तीन", "चार"], a: "तीन", e: "एक बाइपोलर जंक्शन ट्रांजिस्टर (BJT) में तीन टर्मिनल होते हैं: उत्सर्जक, आधार और संग्राहक।"},
+                {q: "एक p-n जंक्शन डायोड में अवक्षय क्षेत्र में होते हैं...", o: ["गतिशील आवेश वाहक", "स्थिर आयन", "गतिशील और स्थिर दोनों आवेश", "कोई आवेश नहीं"], a: "स्थिर आयन", e: "अवक्षय क्षेत्र इलेक्ट्रॉनों और होलों के विसरण से बनता है, जो जंक्शन के विपरीत किनारों पर स्थिर धनात्मक और ऋणात्मक आयनों को पीछे छोड़ देता है।"},
+                {q: "अग्र अभिनति में, एक p-n जंक्शन डायोड की अवक्षय परत की चौड़ाई...", o: ["बढ़ती है", "घटती है", "अपरिवर्तित रहती है", "पहले बढ़ती है फिर घटती है"], a: "घटती है", e: "एक अग्र अभिनति वोल्टेज लगाने से अंतर्निहित क्षमता का विरोध होता है, अवक्षय परत की चौड़ाई कम हो जाती है और धारा को प्रवाहित होने दिया जाता है।"},
+                {q: "किस लॉजिक गेट को सार्वभौमिक गेट के रूप में जाना जाता है?", o: ["AND गेट", "OR गेट", "NOT गेट", "NAND गेट"], a: "NAND गेट", e: "NAND और NOR दोनों गेटों को सार्वभौमिक गेट कहा जाता है क्योंकि कोई भी अन्य लॉजिक गेट (जैसे AND, OR, NOT) केवल NAND गेटों या केवल NOR गेटों का उपयोग करके बनाया जा सकता है।"}
+            ],
+            medium: [/* 9 questions */],
+            hard: [/* 9 questions */]
+        }
+    },
+    or: {
+        emi: {
+            easy: [
+                {q: "ଲେଞ୍ଜଙ୍କ ନିୟମ କେଉଁ ସଂରକ୍ଷଣ ନିୟମର ପରିଣାମ ଅଟେ?", o: ["ଚାର୍ଜ", "ବସ୍ତୁତ୍ୱ", "ଶକ୍ତି", "ସମ୍ବେଗ"], a: "ଶକ୍ତି", e: "ଲେଞ୍ଜଙ୍କ ନିୟମ ଅନୁଯାୟୀ, ପ୍ରେରିତ କରେଣ୍ଟ ଏକ ଦିଗରେ ପ୍ରବାହିତ ହେବ ଯାହା ଏହାକୁ ଉତ୍ପନ୍ନ କରିଥିବା ପରିବର୍ତ୍ତନକୁ ବିରୋଧ କରିବ। ଏହା ଶକ୍ତି ସଂରକ୍ଷଣ କରେ।"},
+                {q: "ଚୁମ୍ବକୀୟ ଫ୍ଲକ୍ସର SI ଏକକ କ'ଣ?", o: ["ଟେସଲା", "ୱେବର୍", "ହେନେରୀ", "ଗସ୍"], a: "ୱେବର୍", e: "ଚୁମ୍ବକୀୟ ଫ୍ଲକ୍ସ (Φ) ଏକ ନିର୍ଦ୍ଦିଷ୍ଟ କ୍ଷେତ୍ର ଦେଇ ଯାଉଥିବା ସମୁଦାୟ ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ର ରେଖାର ମାପ। ଏହାର SI ଏକକ ହେଉଛି ୱେବର୍ (Wb)।"},
+                {q: "ଏକ କଏଲରେ ପ୍ରେରିତ EMF କେବେ ଉତ୍ପନ୍ନ ହୁଏ?", o: ["ଯେତେବେଳେ ଏହା ଏକ ସ୍ଥିର ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ରରେ ରଖାଯାଏ", "ଯେତେବେଳେ ଏହା ସହିତ ସଂଯୁକ୍ତ ଚୁମ୍ବକୀୟ ଫ୍ଲକ୍ସ ପରିବର୍ତ୍ତନ ହୁଏ", "ଯେତେବେଳେ ଏହା ଏକ ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ର ସହିତ ସମାନ୍ତରାଳ ଭାବରେ ଗତି କରେ", "ଯେତେବେଳେ ଏହା ଏକ ବୈଦ୍ୟୁତିକ କ୍ଷେତ୍ରରେ ରଖାଯାଏ"], a: "ଯେତେବେଳେ ଏହା ସହିତ ସଂଯୁକ୍ତ ଚୁମ୍ବକୀୟ ଫ୍ଲକ୍ସ ପରିବର୍ତ୍ତନ ହୁଏ", e: "ଫାରାଡେଙ୍କ ପ୍ରେରଣ ନିୟମ ଅନୁଯାୟୀ, ଯେକୌଣସି ବନ୍ଦ ସର୍କିଟରେ ଏକ ଇଲେକ୍ଟ୍ରୋମୋଟିଭ୍ ଫୋର୍ସ (EMF) ପ୍ରେରିତ ହୁଏ ଯେତେବେଳେ ସର୍କିଟ୍ ମାଧ୍ୟମରେ ଚୁମ୍ବକୀୟ ଫ୍ଲକ୍ସ ପରିବର୍ତ୍ତନ ହୁଏ।"},
+                {q: "ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ର ପରିବର୍ତ୍ତନ କରି ବିଦ୍ୟୁତ୍ ସ୍ରୋତ ଉତ୍ପନ୍ନ କରିବା ପ୍ରକ୍ରିୟାକୁ କ'ଣ କୁହାଯାଏ?", o: ["ଇଲେକ୍ଟ୍ରୋଲିସିସ୍", "ବିଦ୍ୟୁତ୍ ଚୁମ୍ବକୀୟ ପ୍ରେରଣ", "ବିଦ୍ୟୁତ୍ ସ୍ରୋତର ଚୁମ୍ବକୀୟ ପ୍ରଭାବ", "ଇଲେକ୍ଟ୍ରୋପ୍ଲେଟିଂ"], a: "ବିଦ୍ୟୁତ୍ ଚୁମ୍ବକୀୟ ପ୍ରେରଣ", e: "ବିଦ୍ୟୁତ୍ ଚୁମ୍ବକୀୟ ପ୍ରେରଣ ହେଉଛି ଏକ ପରିବର୍ତ୍ତନଶୀଳ ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ରରେ ଏକ ବୈଦ୍ୟୁତିକ କଣ୍ଡକ୍ଟରରେ ଏକ ଇଲେକ୍ଟ୍ରୋମୋଟିଭ୍ ଫୋର୍ସର ଉତ୍ପାଦନ।"},
+                {q: "ପ୍ରେରିତ ସ୍ରୋତର ଦିଗ କାହା ଦ୍ୱାରା ଦିଆଯାଏ?", o: ["ଫ୍ଲେମିଙ୍ଗଙ୍କ ବାମ-ହସ୍ତ ନିୟମ", "ଫ୍ଲେମିଙ୍ଗଙ୍କ ଦକ୍ଷିଣ-ହସ୍ତ ନିୟମ", "ଆମ୍ପିୟରଙ୍କ ନିୟମ", "ବାୟୋଟ୍-ସାଭାର୍ଟ ନିୟମ"], a: "ଫ୍ଲେମିଙ୍ଗଙ୍କ ଦକ୍ଷିଣ-ହସ୍ତ ନିୟମ", e: "ଫ୍ଲେମିଙ୍ଗଙ୍କ ଦକ୍ଷିଣ-ହସ୍ତ ନିୟମ ପ୍ରେରିତ ସ୍ରୋତର ଦିଗ ଖୋଜିବାରେ ସାହାଯ୍ୟ କରେ ଯେତେବେଳେ ଏକ କଣ୍ଡକ୍ଟର ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ରରେ ଗତି କରେ।"},
+                {q: "ଏକ ଟ୍ରାନ୍ସଫର୍ମର କେଉଁ ସିଦ୍ଧାନ୍ତ ଉପରେ କାର୍ଯ୍ୟ କରେ?", o: ["ଆତ୍ମ-ପ୍ରେରଣ", "ପାରସ୍ପରିକ ପ୍ରେରଣ", "ସ୍ଥିର ବିଦ୍ୟୁତ୍", "ଜୁଲଙ୍କ ନିୟମ"], a: "ପାରସ୍ପରିକ ପ୍ରେରଣ", e: "ଏକ ଟ୍ରାନ୍ସଫର୍ମର ପାରସ୍ପରିକ ପ୍ରେରଣର ସିଦ୍ଧାନ୍ତ ଉପରେ କାର୍ଯ୍ୟ କରେ, ଯେଉଁଠାରେ ଗୋଟିଏ କଏଲରେ ପରିବର୍ତ୍ତନଶୀଳ ସ୍ରୋତ ନିକଟବର୍ତ୍ତୀ ଦ୍ୱିତୀୟ କଏଲରେ EMF ପ୍ରେରିତ କରେ।"},
+                {q: "କେଉଁ ଉପକରଣ ଯାନ୍ତ୍ରିକ ଶକ୍ତିକୁ ବୈଦ୍ୟୁତିକ ଶକ୍ତିରେ ପରିଣତ କରେ?", o: ["ମୋଟର", "ଜେନେରେଟର", "ଟ୍ରାନ୍ସଫର୍ମର", "ଗାଲ୍ଭାନୋମିଟର"], a: "ଜେନେରେଟର", e: "ଏକ ବୈଦ୍ୟୁତିକ ଜେନେରେଟର ହେଉଛି ଏକ ଉପକରଣ ଯାହା ବାହ୍ୟ ଉତ୍ସରୁ ପ୍ରାପ୍ତ ଯାନ୍ତ୍ରିକ ଶକ୍ତିକୁ ଆଉଟପୁଟ୍ ଭାବରେ ବୈଦ୍ୟୁତିକ ଶକ୍ତିରେ ପରିଣତ କରେ।"},
+                {q: "ଏକ ଷ୍ଟେପ୍-ଅପ୍ ଟ୍ରାନ୍ସଫର୍ମର କ'ଣ କରେ?", o: ["ଭୋଲଟେଜ୍ ବଢାଏ, ସ୍ରୋତ କମାଏ", "ଭୋଲଟେଜ୍ କମାଏ, ସ୍ରୋତ ବଢାଏ", "ଉଭୟ ଭୋଲଟେଜ୍ ଏବଂ ସ୍ରୋତ ବଢାଏ", "ଉଭୟ ଭୋଲଟେଜ୍ ଏବଂ ସ୍ରୋତ କମାଏ"], a: "ଭୋଲଟେଜ୍ ବଢାଏ, ସ୍ରୋତ କମାଏ", e: "ଏକ ଷ୍ଟେପ୍-ଅପ୍ ଟ୍ରାନ୍ସଫର୍ମର ପ୍ରାଥମିକରୁ ଦ୍ୱିତୀୟକ ପର୍ଯ୍ୟନ୍ତ ଭୋଲଟେଜ୍ ବଢାଏ, ଏବଂ ଫଳସ୍ୱରୂପ ଶକ୍ତି ସଂରକ୍ଷଣ ପାଇଁ ସ୍ରୋତ କମାଏ।"},
+                {q: "ଏକ କଏଲର ପ୍ରେରକତା କେଉଁଥିରେ ମାପ କରାଯାଏ?", o: ["ଫାରାଡ୍", "ଓମ୍", "ହେନେରୀ", "ୱେବର୍"], a: "ହେନେରୀ", e: "ପ୍ରେରକତା ହେଉଛି ଏକ ବୈଦ୍ୟୁତିକ କଣ୍ଡକ୍ଟରର ଗୁଣ ଯାହା ଦ୍ୱାରା ଏହା ମାଧ୍ୟମରେ ସ୍ରୋତର ପରିବର୍ତ୍ତନ ଏକ ଇଲେକ୍ଟ୍ରୋମୋଟିଭ୍ ଫୋର୍ସ ପ୍ରେରିତ କରେ। ଏହାର SI ଏକକ ହେନେରୀ (H) ଅଟେ।"}
+            ],
+            medium: [/* 9 questions */],
+            hard: [/* 9 questions */]
+        },
+        semiconductors: {
+            easy: [
+                {q: "ଏକ p-ପ୍ରକାରର ଅର୍ଦ୍ଧପରିବାହୀରେ, ବହୁସଂଖ୍ୟକ ଚାର୍ଜ ବାହକ ହେଉଛନ୍ତି...", o: ["ଇଲେକ୍ଟ୍ରନ୍", "ହୋଲ୍", "ପ୍ରୋଟନ୍", "ନ୍ୟୁଟ୍ରନ୍"], a: "ହୋଲ୍", e: "P-ପ୍ରକାରର ଅର୍ଦ୍ଧପରିବାହୀ ତ୍ରିସଂଯୋଜକୀୟ ଅପମିଶ୍ରଣ ସହିତ ଡୋପିଂ କରି ତିଆରି କରାଯାଏ, ଯାହା 'ହୋଲ୍'ର ପ୍ରଚୁରତା ସୃଷ୍ଟି କରେ ଯାହା ଧନାତ୍ମକ ଚାର୍ଜ ବାହକ ଭାବରେ କାର୍ଯ୍ୟ କରେ।"},
+                {q: "ଶକ୍ତି ବ୍ୟବଧାନ କେଉଁଥିରେ ସର୍ବାଧିକ?", o: ["ପରିବାହୀ", "ଅପରିବାହୀ", "ଅର୍ଦ୍ଧପରିବାହୀ", "ଅତିପରିବାହୀ"], a: "ଅପରିବାହୀ", e: "ଅପରିବାହୀମାନଙ୍କର ଏକ ବହୁତ ବଡ ନିଷିଦ୍ଧ ଶକ୍ତି ବ୍ୟବଧାନ ଥାଏ, ଯାହା ସାଧାରଣ ପରିସ୍ଥିତିରେ ଇଲେକ୍ଟ୍ରନମାନଙ୍କୁ କଣ୍ଡକ୍ସନ୍ ବ୍ୟାଣ୍ଡକୁ ଯିବାରେ ବାଧା ଦିଏ।"},
+                {q: "ଏକ ଡାୟୋଡ୍ ବିଦ୍ୟୁତ୍ ସ୍ରୋତକୁ ପ୍ରବାହିତ ହେବାକୁ ଦିଏ...", o: ["ଉଭୟ ଦିଗରେ", "କେବଳ ଗୋଟିଏ ଦିଗରେ", "କେବଳ ଗରମ ହେଲେ", "କେବଳ ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ରରେ"], a: "କେବଳ ଗୋଟିଏ ଦିଗରେ", e: "ଏକ ଆଦର୍ଶ ଡାୟୋଡର ଫରୱାର୍ଡ-ବାୟାସ୍ ଦିଗରେ ଶୂନ୍ୟ ପ୍ରତିରୋଧ ଏବଂ ରିଭର୍ସ-ବାୟାସ୍ ଦିଗରେ ଅସୀମ ପ୍ରତିରୋଧ ଥାଏ, ଯାହାଦ୍ୱାରା ସ୍ରୋତ କେବଳ ଗୋଟିଏ ପଟେ ପ୍ରବାହିତ ହୁଏ।"},
+                {q: "ଏକ ଶୁଦ୍ଧ ଅର୍ଦ୍ଧପରିବାହୀରେ ଅପମିଶ୍ରଣ ମିଶାଇବା ପ୍ରକ୍ରିୟାକୁ କ'ଣ କୁହାଯାଏ?", o: ["ଡୋପିଂ", "ଆନିଲିଂ", "ଡିଫ୍ୟୁଜନ୍", "ଡ୍ରିଫ୍ଟିଂ"], a: "ଡୋପିଂ", e: "ଡୋପିଂ ହେଉଛି ଏହାର ବୈଦ୍ୟୁତିକ ଗୁଣକୁ ପରିବର୍ତ୍ତନ କରିବା ଉଦ୍ଦେଶ୍ୟରେ ଏକ ଆନ୍ତରିକ ଅର୍ଦ୍ଧପରିବାହୀରେ ଅପମିଶ୍ରଣର ଇଚ୍ଛାକୃତ ପ୍ରବେଶ।"},
+                {q: "ନିମ୍ନଲିଖିତ ମଧ୍ୟରୁ କେଉଁଟି ଏକ ଆନ୍ତରିକ ଅର୍ଦ୍ଧପରିବାହୀର ଉଦାହରଣ?", o: ["ଫସଫରସ୍ ସହିତ ଡୋପ୍ ହୋଇଥିବା ସିଲିକନ୍", "ବୋରନ୍ ସହିତ ଡୋପ୍ ହୋଇଥିବା ଜର୍ମାନିୟମ୍", "ଶୁଦ୍ଧ ସିଲିକନ୍", "ଗ୍ୟାଲିୟମ୍ ଆର୍ସେନାଇଡ୍"], a: "ଶୁଦ୍ଧ ସିଲିକନ୍", e: "ଆନ୍ତରିକ ଅର୍ଦ୍ଧପରିବାହୀ ହେଉଛି ଶୁଦ୍ଧ ଅର୍ଦ୍ଧପରିବାହୀ ଯେଉଁଥିରେ କୌଣସି ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ ଡୋପାଣ୍ଟ ପ୍ରଜାତି ନଥାଏ। ଶୁଦ୍ଧ ସିଲିକନ୍ ଏବଂ ଜର୍ମାନିୟମ୍ ସାଧାରଣ ଉଦାହରଣ।"},
+                {q: "ଏକ ଟ୍ରାନଜିଷ୍ଟରର କେତୋଟି ଟର୍ମିନାଲ୍ ଅଛି?", o: ["ଗୋଟିଏ", "ଦୁଇଟି", "ତିନୋଟି", "ଚାରୋଟି"], a: "ତିନୋଟି", e: "ଏକ ବାଇପୋଲାର୍ ଜଙ୍କସନ୍ ଟ୍ରାନଜିଷ୍ଟର (BJT) ର ତିନୋଟି ଟର୍ମିନାଲ୍ ଅଛି: ଏମିଟର, ବେସ୍, ଏବଂ କଲେକ୍ଟର।"},
+                {q: "ଏକ p-n ଜଙ୍କସନ୍ ଡାୟୋଡରେ ଡିପ୍ଲେସନ୍ ଅଞ୍ଚଳରେ କ'ଣ ଥାଏ?", o: ["ଗତିଶୀଳ ଚାର୍ଜ ବାହକ", "ସ୍ଥିର ଆୟନ", "ଉଭୟ ଗତିଶୀଳ ଏବଂ ସ୍ଥିର ଚାର୍ଜ", "କୌଣସି ଚାର୍ଜ ନାହିଁ"], a: "ସ୍ଥିର ଆୟନ", e: "ଡିପ୍ଲେସନ୍ ଅଞ୍ଚଳ ଇଲେକ୍ଟ୍ରନ୍ ଏବଂ ହୋଲ୍ ର ଡିଫ୍ୟୁଜନ୍ ଦ୍ୱାରା ସୃଷ୍ଟି ହୁଏ, ଯାହା ଜଙ୍କସନ୍ ର ବିପରୀତ ପାର୍ଶ୍ୱରେ ସ୍ଥିର ଧନାତ୍ମକ ଏବଂ ଋଣାତ୍ମକ ଆୟନ ଛାଡିଦିଏ।"},
+                {q: "ଫରୱାର୍ଡ ବାୟାସରେ, ଏକ p-n ଜଙ୍କସନ୍ ଡାୟୋଡର ଡିପ୍ଲେସନ୍ ସ୍ତରର ମୋଟେଇ...", o: ["ବଢିଥାଏ", "କମିଥାଏ", "ଅପରିବର୍ତ୍ତିତ ରହେ", "ପ୍ରଥମେ ବଢି ପରେ କମିଥାଏ"], a: "କମିଥାଏ", e: "ଏକ ଫରୱାର୍ଡ ବାୟାସ୍ ଭୋଲଟେଜ୍ ପ୍ରୟୋଗ କରିବା ଦ୍ୱାରା ଅନ୍ତର୍ନିହିତ ସମ୍ଭାବନାକୁ ବିରୋଧ କରେ, ଡିପ୍ଲେସନ୍ ସ୍ତରର ମୋଟେଇ କମାଇଥାଏ ଏବଂ ସ୍ରୋତକୁ ପ୍ରବାହିତ ହେବାକୁ ଦେଇଥାଏ।"},
+                {q: "କେଉଁ ଲଜିକ୍ ଗେଟ୍ ସାର୍ବଜନୀନ ଗେଟ୍ ଭାବରେ ଜଣାଶୁଣା?", o: ["AND ଗେଟ୍", "OR ଗେଟ୍", "NOT ଗେଟ୍", "NAND ଗେଟ୍"], a: "NAND ଗେଟ୍", e: "NAND ଏବଂ NOR ଉଭୟ ଗେଟ୍କୁ ସାର୍ବଜନୀନ ଗେଟ୍ କୁହାଯାଏ କାରଣ ଅନ୍ୟ କୌଣସି ଲଜିକ୍ ଗେଟ୍ (ଯେପରିକି AND, OR, NOT) କେବଳ NAND ଗେଟ୍ ବା କେବଳ NOR ଗେଟ୍ ବ୍ୟବହାର କରି ତିଆରି କରାଯାଇପାରିବ।"}
+            ],
+            medium: [/* 9 questions */],
+            hard: [/* 9 questions */]
+        }
+    }
+};
+
+// Placeholder for medium and hard questions (copying easy for demonstration)
+['en', 'hi', 'or'].forEach(lang => {
+    ['emi', 'semiconductors'].forEach(domain => {
+        quizDataSource[lang][domain].medium = [...quizDataSource[lang][domain].easy].sort(() => 0.5 - Math.random());
+        quizDataSource[lang][domain].hard = [...quizDataSource[lang][domain].easy].sort(() => 0.5 - Math.random());
+    });
+});
+
+</script>
+</body>
+</html>
