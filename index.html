@@ -154,9 +154,14 @@
         <!-- Quiz Screen -->
         <div id="quiz-screen" class="hidden w-full">
             <div class="card p-6 md:p-8 rounded-lg shadow-2xl">
-                <div class="flex justify-between items-center mb-4">
-                    <div id="progress-text" class="text-lg font-medium text-gray-300"></div>
-                    <div id="score-text" class="text-lg font-bold text-cyan-400"></div>
+                <div class="flex items-center mb-4">
+                     <button onclick="goBack('difficulty-screen')" class="text-gray-400 hover:text-white transition-colors mr-4" title="Back to selection">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-circle"><circle cx="12" cy="12" r="10"/><path d="M16 12H8"/><path d="m12 8-4 4 4 4"/></svg>
+                    </button>
+                    <div class="flex justify-between items-center w-full">
+                        <div id="progress-text" class="text-lg font-medium text-gray-300"></div>
+                        <div id="score-text" class="text-lg font-bold text-cyan-400"></div>
+                    </div>
                 </div>
                 <div class="w-full bg-gray-700 rounded-full h-2.5 mb-6">
                     <div id="progress-bar" class="bg-cyan-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
@@ -247,19 +252,6 @@
         nextBtn: document.getElementById('next-question-btn'),
     };
 
-    // --- DATA ---
-    const quizData = {
-        en: {
-            // ... (rest of the data structure)
-        },
-        hi: {
-            // ... (rest of the data structure)
-        },
-        or: {
-            // ... (rest of the data structure)
-        }
-    };
-
     // --- TEXT & TRANSLATIONS ---
     const uiText = {
         en: {
@@ -274,8 +266,8 @@
             of: "of",
             score: "Score",
             results: "Results",
-            wellDone: "Well Done!",
-            keepTrying: "Keep Trying!",
+            wellDone: "Excellent! You have a strong grasp of the concepts.",
+            keepTrying: "Good effort! Review the explanations and try again.",
             playAgain: "Play Again",
             powerful: "Powerful!",
             cracked: "Cracked It!",
@@ -299,8 +291,8 @@
             of: "का",
             score: "स्कोर",
             results: "परिणाम",
-            wellDone: "बहुत बढ़िया!",
-            keepTrying: "कोशिश करते रहो!",
+            wellDone: "बहुत बढ़िया! आपकी अवधारणाओं पर अच्छी पकड़ है।",
+            keepTrying: "अच्छा प्रयास! स्पष्टीकरण की समीक्षा करें और पुनः प्रयास करें।",
             playAgain: "फिर से खेलें",
             powerful: "शक्तिशाली!",
             cracked: "बहुत खूब!",
@@ -324,8 +316,8 @@
             of: "ରୁ",
             score: "ସ୍କୋର୍",
             results: "ଫଳାଫଳ",
-            wellDone: "ବହୁତ ଭଲ!",
-            keepTrying: "ଚେଷ୍ଟା ଜାରି ରଖନ୍ତୁ!",
+            wellDone: "ଉତ୍ତମ! ଆପଣଙ୍କର ଧାରଣାଗୁଡ଼ିକ ଉପରେ ଦୃଢ଼ ଧାରଣା ଅଛି।",
+            keepTrying: "ଭଲ ପ୍ରୟାସ! ବ୍ୟାଖ୍ୟାଗୁଡ଼ିକର ସମୀକ୍ଷା କରନ୍ତୁ ଏବଂ ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ।",
             playAgain: "ପୁଣି ଖେଳନ୍ତୁ",
             powerful: "ଶକ୍ତିଶାଳୀ!",
             cracked: "उत्तम!",
@@ -408,9 +400,9 @@
 
         // Update progress
         const progressPercentage = ((currentQuestionIndex) / questions.length) * 100;
-        quizUI.progressBar.style.width = ${progressPercentage}%;
-        quizUI.progressText.innerText = ${t.question} ${currentQuestionIndex + 1} ${t.of} ${questions.length};
-        quizUI.scoreText.innerText = ${t.score}: ${score};
+        quizUI.progressBar.style.width = `${progressPercentage}%`;
+        quizUI.progressText.innerText = `${t.question} ${currentQuestionIndex + 1} ${t.of} ${questions.length}`;
+        quizUI.scoreText.innerText = `${t.score}: ${score}`;
 
         // Display question and options
         quizUI.questionText.innerText = question.q;
@@ -505,7 +497,7 @@
         const percentage = Math.round((score / questions.length) * 100);
         
         resultUI.title.innerText = t.results;
-        resultUI.score.innerText = ${score} / ${questions.length};
+        resultUI.score.innerText = `${score} / ${questions.length}`;
         
         if (percentage > 70) {
             resultUI.feedback.innerText = t.wellDone;
@@ -533,8 +525,28 @@ const quizDataSource = {
                 {q: "What does a step-up transformer do?", o: ["Increases voltage, decreases current", "Decreases voltage, increases current", "Increases both voltage and current", "Decreases both voltage and current"], a: "Increases voltage, decreases current", e: "A step-up transformer increases the voltage from primary to secondary, and consequently decreases the current to conserve power."},
                 {q: "The inductance of a coil is measured in...", o: ["Farads", "Ohms", "Henry", "Weber"], a: "Henry", e: "Inductance is the property of an electrical conductor by which a change in current through it induces an electromotive force. Its SI unit is the Henry (H)."}
             ],
-            medium: [/* 9 questions */],
-            hard: [/* 9 questions */]
+            medium: [
+                {q: "Eddy currents are produced when...", o: ["A metal is kept in varying magnetic field", "A metal is kept in steady magnetic field", "A circular coil is placed in a magnetic field", "Current is passed through a circular coil"], a: "A metal is kept in varying magnetic field", e: "Eddy currents are loops of electrical current induced within conductors by a changing magnetic field in the conductor, according to Faraday's law of induction."},
+                {q: "The self-inductance of a long solenoid is proportional to... (N is number of turns, A is area, l is length)", o: ["N A / l", "N^2 A / l", "N A^2 / l", "N^2 A^2 / l"], a: "N^2 A / l", e: "The self-inductance L of a solenoid is given by L = (μ₀ * N² * A) / l, so it is directly proportional to the square of the number of turns and the area, and inversely proportional to the length."},
+                {q: "A choke coil is a coil with...", o: ["High inductance and low resistance", "Low inductance and high resistance", "High inductance and high resistance", "Low inductance and low resistance"], a: "High inductance and low resistance", e: "A choke coil is used to block higher-frequency AC in a circuit, while allowing DC or lower-frequency AC to pass. This requires high inductance for high reactance and low resistance to minimize power loss."},
+                {q: "If the number of turns in a coil is doubled, its self-inductance becomes...", o: ["Half", "Double", "Four times", "Unchanged"], a: "Four times", e: "Self-inductance is proportional to the square of the number of turns (N²). So, if N is doubled, L becomes (2N)² = 4N², i.e., four times the original value."},
+                {q: "Motional EMF is given by the formula...", o: ["E = Blv", "E = B/lv", "E = Bl/v", "E = lv/B"], a: "E = Blv", e: "When a conductor of length 'l' moves with velocity 'v' perpendicular to a magnetic field 'B', the induced EMF is given by E = Blv."},
+                {q: "In an AC generator, the induced EMF is maximum when the angle between the coil's normal and the magnetic field is...", o: ["0°", "45°", "90°", "180°"], a: "90°", e: "The induced EMF is proportional to sin(θ). It is maximum when sin(θ) is maximum, which occurs when θ = 90°, meaning the plane of the coil is parallel to the magnetic field."},
+                {q: "What is the primary cause of energy loss in a transformer core?", o: ["Hysteresis loss", "Eddy current loss", "Both A and B", "Resistance of windings"], a: "Both A and B", e: "Both Hysteresis (due to repeated magnetization/demagnetization of the core) and Eddy currents (induced in the core) cause significant energy loss as heat in a transformer core."},
+                {q: "The quantity that remains unchanged in a transformer is...", o: ["Voltage", "Current", "Frequency", "Power (Ideal)"], a: "Frequency", e: "A transformer changes voltage and current levels, but the frequency of the alternating current remains the same between the primary and secondary coils. In an ideal transformer, power also remains constant."},
+                {q: "If a magnetic flux linked with a coil changes by 0.5 Wb in 0.1s, the induced EMF is:", o: ["5 V", "0.5 V", "0.05 V", "50 V"], a: "5 V", e: "According to Faraday's Law, EMF = -dΦ/dt. Ignoring the direction, EMF = ΔΦ / Δt = 0.5 Wb / 0.1 s = 5 V."}
+            ],
+            hard: [
+                {q: "A metallic ring is attached to a wall. When a bar magnet is pushed towards it, the induced current in the ring will be...", o: ["Clockwise", "Anticlockwise", "Zero", "First clockwise then anticlockwise"], a: "Anticlockwise", e: "As the North pole of the magnet approaches, the magnetic flux increases. By Lenz's law, the ring will induce a North pole to repel it. Using the right-hand thumb rule, an anticlockwise current creates a North pole."},
+                {q: "An inductor of 2 H and a resistor of 10 Ω are connected to a 100 V battery. The time constant of the circuit is...", o: ["0.2 s", "5 s", "20 s", "0.05 s"], a: "0.2 s", e: "The time constant (τ) of an LR circuit is given by the formula τ = L/R. Here, τ = 2 H / 10 Ω = 0.2 seconds."},
+                {q: "In a pure inductive AC circuit, the voltage...", o: ["Leads the current by π/2", "Lags the current by π/2", "Is in phase with the current", "Leads the current by π"], a: "Leads the current by π/2", e: "In a purely inductive circuit, the current takes time to build up against the back EMF. As a result, the voltage waveform reaches its maximum value 90 degrees (or π/2 radians) before the current waveform does."},
+                {q: "A horizontal straight wire 10 m long extending from east to west is falling with a speed of 5.0 m/s, at right angles to the horizontal component of the Earth’s magnetic field, 0.30 × 10⁻⁴ Wb m⁻². The instantaneous value of the EMF induced is:", o: ["1.5 mV", "15 mV", "0.15 mV", "150 mV"], a: "1.5 mV", e: "Using motional EMF formula E = Blv. E = (0.30 × 10⁻⁴ T) * (10 m) * (5.0 m/s) = 1.5 × 10⁻³ V = 1.5 mV."},
+                {q: "The quality factor (Q-factor) of an LCR series circuit is given by...", o: ["(1/R)√(L/C)", "(1/R)√(C/L)", "R√(L/C)", "R√(C/L)"], a: "(1/R)√(L/C)", e: "The Q-factor represents the sharpness of resonance in an LCR circuit. It is defined as Q = (ω₀L) / R, and since ω₀ = 1/√(LC), substituting gives Q = (1/R)√(L/C)."},
+                {q: "A step-down transformer is used on a 2.5 kV line to provide a current of 80 A. If the primary to secondary turn ratio is 20:1 and efficiency is 80%, what is the input power?", o: ["12.5 kW", "10 kW", "16 kW", "15.625 kW"], a: "12.5 kW", e: "First find output power P_out = V_s * I_s. We need V_s. V_s/V_p = N_s/N_p = 1/20 => V_s = 2500V/20 = 125V. P_out = 125V * 80A = 10000W = 10kW. Efficiency = P_out / P_in => P_in = P_out / Efficiency = 10kW / 0.80 = 12.5 kW."},
+                {q: "A long solenoid with 15 turns/cm has a small loop of area 2.0 cm² placed inside it. If the current in the solenoid changes from 2.0 A to 4.0 A in 0.1 s, what is the induced EMF in the loop?", o: ["7.5 μV", "15 μV", "3.75 μV", "0.75 μV"], a: "7.5 μV", e: "B = μ₀nI. EMF = -A * (dB/dt) = -Aμ₀n(dI/dt). n=15 turns/cm = 1500 turns/m. dI/dt = (4-2)/0.1 = 20 A/s. EMF = (2x10⁻⁴ m²)(4πx10⁻⁷)(1500)(20) ≈ 7.54x10⁻⁶ V = 7.5 μV."},
+                {q: "The energy stored in an inductor is given by the formula...", o: ["(1/2)LI", "(1/2)L²I", "(1/2)LI²", "(1/2)L/I²"], a: "(1/2)LI²", e: "The energy (U) stored in the magnetic field of an inductor with inductance L carrying a current I is given by the formula U = (1/2)LI²."},
+                {q: "What is the dimensional formula for mutual inductance?", o: ["[ML²T⁻²A⁻²]", "[MLT⁻²A⁻¹]", "[ML²T⁻¹A⁻²]", "[ML²T⁻³A⁻²]"], a: "[ML²T⁻²A⁻²]", e: "EMF (E) = -M(dI/dt). So, M = -E / (dI/dt). The dimension of EMF is [ML²T⁻³A⁻¹] (Work/Charge), and dI/dt is [AT⁻¹]. Therefore, M = [ML²T⁻³A⁻¹] / [AT⁻¹] = [ML²T⁻²A⁻²]."}
+            ]
         },
         semiconductors: {
             easy: [
@@ -548,8 +560,28 @@ const quizDataSource = {
                 {q: "In forward bias, the width of the depletion layer of a p-n junction diode...", o: ["Increases", "Decreases", "Remains unchanged", "First increases then decreases"], a: "Decreases", e: "Applying a forward bias voltage opposes the built-in potential, reducing the width of the depletion layer and allowing current to flow."},
                 {q: "Which logic gate is known as the universal gate?", o: ["AND gate", "OR gate", "NOT gate", "NAND gate"], a: "NAND gate", e: "Both NAND and NOR gates are called universal gates because any other logic gate (like AND, OR, NOT) can be created using only NAND gates or only NOR gates."}
             ],
-            medium: [/* 9 questions */],
-            hard: [/* 9 questions */]
+            medium: [
+                {q: "A Zener diode is primarily used as a...", o: ["Rectifier", "Amplifier", "Voltage regulator", "Oscillator"], a: "Voltage regulator", e: "A Zener diode is designed to operate in the reverse breakdown region, maintaining a nearly constant voltage across it, making it ideal for voltage regulation."},
+                {q: "In a common-emitter (CE) amplifier, the output voltage is...", o: ["In phase with the input", "180° out of phase with the input", "90° out of phase with the input", "45° out of phase with the input"], a: "180° out of phase with the input", e: "In a CE configuration, a small increase in the base current causes a large increase in the collector current, which in turn causes a large drop in the voltage across the collector resistor. This results in an inverted or 180° phase-shifted output signal."},
+                {q: "What is the function of a rectifier?", o: ["Convert AC to DC", "Convert DC to AC", "Amplify the signal", "Regulate voltage"], a: "Convert AC to DC", e: "A rectifier is an electrical device that converts alternating current (AC), which periodically reverses direction, to direct current (DC), which flows in only one direction."},
+                {q: "The Boolean expression for a NOR gate is...", o: ["Y = A . B", "Y = A + B", "Y = (A + B)'", "Y = (A . B)'"], a: "Y = (A + B)'", e: "A NOR gate is an OR gate followed by a NOT gate. The expression for OR is A + B, and the NOT operation is represented by the prime ('), so the NOR expression is Y = (A + B)'."},
+                {q: "What type of device is an LED?", o: ["Photovoltaic cell", "Heavily doped p-n junction", "Metal-semiconductor junction", "Intrinsic semiconductor"], a: "Heavily doped p-n junction", e: "A Light Emitting Diode (LED) is a heavily doped p-n junction diode which, under forward bias, emits spontaneous radiation. The color depends on the semiconductor material used."},
+                {q: "The current gain (β) of a transistor is defined as...", o: ["Ic / Ib", "Ic / Ie", "Ie / Ib", "Ib / Ic"], a: "Ic / Ib", e: "In a common-emitter configuration, the DC current gain, beta (β), is the ratio of the collector current (Ic) to the base current (Ib)."},
+                {q: "A photodiode is operated in...", o: ["Forward bias", "Reverse bias", "No bias", " breakdown region"], a: "Reverse bias", e: "Photodiodes are operated in reverse bias because the reverse current is directly proportional to the intensity of light falling on it, making it a good light detector."},
+                {a: "Half-wave rectifier", q: "Which type of rectifier has the highest amount of ripple in its output?", o: ["Full-wave rectifier", "Bridge rectifier", "Half-wave rectifier", "Voltage doubler"], e: "A half-wave rectifier only utilizes one half of the AC cycle, resulting in a large gap between pulses in the DC output. This creates a high ripple factor compared to full-wave rectifiers."},
+                {q: "The forbidden energy gap for Germanium (Ge) at room temperature is approximately...", o: ["1.1 eV", "0.72 eV", "5.4 eV", "0.3 eV"], a: "0.72 eV", e: "The band gap for Germanium is about 0.72 eV, which is smaller than that of Silicon (approx. 1.1 eV). This makes Ge more conductive but also more sensitive to temperature changes."}
+            ],
+            hard: [
+                {q: "An oscillator is an amplifier with...", o: ["Positive feedback", "Negative feedback", "No feedback", "Both positive and negative feedback"], a: "Positive feedback", e: "An oscillator generates a periodic waveform without any input signal. It uses positive feedback, where a fraction of the output signal is fed back to the input in phase, to sustain oscillations."},
+                {q: "The output of the given logic circuit (an input A fed to a two-input NAND gate whose inputs are shorted) is:", o: ["A", "1", "0", "A' (NOT A)"], a: "A' (NOT A)", e: "When both inputs of a NAND gate are tied together (A), the expression becomes (A . A)'. According to Boolean algebra, A . A = A, so the expression simplifies to A'. This means the NAND gate acts as a NOT gate."},
+                {q: "In a full-wave rectifier, if the input frequency is 50 Hz, the output ripple frequency is...", o: ["50 Hz", "25 Hz", "100 Hz", "200 Hz"], a: "100 Hz", e: "A full-wave rectifier inverts the negative half-cycle of the AC input. This means there are two output pulses for every one input cycle. Therefore, the ripple frequency is double the input frequency (2 * 50 Hz = 100 Hz)."},
+                {q: "The transconductance (gm) of a transistor is a measure of...", o: ["Input voltage control over input current", "Output voltage control over input current", "Input voltage control over output current", "Output voltage control over output current"], a: "Input voltage control over output current", e: "Transconductance (gm) is the ratio of the change in the output current (e.g., collector current) to the change in the input voltage (e.g., base-emitter voltage). It describes how effectively the input voltage controls the output current."},
+                {q: "What is the primary function of the base region in a BJT?", o: ["To allow majority carriers to flow from emitter to collector", "To stop the flow of current", "To control the flow of minority carriers from emitter to collector", "To emit charge carriers"], a: "To control the flow of minority carriers from emitter to collector", e: "The base is a very thin, lightly doped region. A small current into the base controls a much larger current flow from the emitter to the collector, essentially acting as a valve for the charge carriers."},
+                {q: "According to De Morgan's theorem, (A + B)' is equal to...", o: ["A' + B'", "A' . B'", "A . B", "(A' . B')'"], a: "A' . B'", e: "De Morgan's first theorem states that the complement of a sum is equal to the product of the complements. Thus, (A + B)' = A' . B'."},
+                {q: "A transistor has a current gain (β) of 100. If the base current is 20 μA, what is the collector current?", o: ["2000 mA", "2 mA", "0.2 mA", "20 mA"], a: "2 mA", e: "Current gain β = Ic / Ib. Therefore, the collector current Ic = β * Ib. Ic = 100 * 20 μA = 2000 μA = 2 mA."},
+                {q: "What is 'doping compensation' in semiconductors?", o: ["Adding both donor and acceptor impurities", "Removing all impurities", "Increasing the temperature", "Using a magnetic field"], a: "Adding both donor and acceptor impurities", e: "Compensation is the process of adding donor impurities to a p-type semiconductor or acceptor impurities to an n-type semiconductor. The material remains p-type or n-type but its majority carrier concentration is reduced."},
+                {q: "A logic circuit that can store one bit of information is called a...", o: ["Multiplexer", "Encoder", "Flip-flop", "Decoder"], a: "Flip-flop", e: "A flip-flop (or latch) is a bistable multivibrator. It has two stable states and can be used to store state information, making it the fundamental building block of digital memory."}
+            ]
         }
     },
     hi: {
@@ -565,8 +597,28 @@ const quizDataSource = {
                 {q: "एक स्टेप-अप ट्रांसफार्मर क्या करता है?", o: ["वोल्टेज बढ़ाता है, धारा घटाता है", "वोल्टेज घटाता है, धारा बढ़ाता है", "वोल्टेज और धारा दोनों बढ़ाता है", "वोल्टेज और धारा दोनों घटाता है"], a: "वोल्टेज बढ़ाता है, धारा घटाता है", e: "एक स्टेप-अप ट्रांसफार्मर प्राइमरी से सेकेंडरी तक वोल्टेज बढ़ाता है, और परिणामस्वरूप शक्ति संरक्षण के लिए धारा घटाता है।"},
                 {q: "एक कुंडली का प्रेरकत्व किसमें मापा जाता है?", o: ["फैराड", "ओम", "हेनरी", "वेबर"], a: "हेनरी", e: "प्रेरकत्व एक विद्युत चालक का वह गुण है जिसके द्वारा उसमें धारा के परिवर्तन से एक इलेक्ट्रोमोटिव बल प्रेरित होता है। इसका SI मात्रक हेनरी (H) है।"}
             ],
-            medium: [/* 9 questions */],
-            hard: [/* 9 questions */]
+            medium: [
+                {q: "भंवर धाराएँ तब उत्पन्न होती हैं जब...", o: ["एक धातु को परिवर्ती चुंबकीय क्षेत्र में रखा जाता है", "एक धातु को स्थिर चुंबकीय क्षेत्र में रखा जाता है", "एक वृत्ताकार कुंडली को चुंबकीय क्षेत्र में रखा जाता है", "एक वृत्ताकार कुंडली से धारा प्रवाहित की जाती है"], a: "एक धातु को परिवर्ती चुंबकीय क्षेत्र में रखा जाता है", e: "फैराडे के प्रेरण के नियम के अनुसार, भंवर धाराएँ चालक में बदलते चुंबकीय क्षेत्र द्वारा चालकों के भीतर प्रेरित विद्युत धारा के लूप हैं।"},
+                {q: "एक लंबी परिनालिका का स्व-प्रेरकत्व किसके समानुपाती होता है? (N फेरों की संख्या है, A क्षेत्रफल है, l लंबाई है)", o: ["N A / l", "N^2 A / l", "N A^2 / l", "N^2 A^2 / l"], a: "N^2 A / l", e: "एक परिनालिका का स्व-प्रेरकत्व L, L = (μ₀ * N² * A) / l द्वारा दिया जाता है, इसलिए यह फेरों की संख्या के वर्ग और क्षेत्रफल के सीधे आनुपातिक और लंबाई के व्युत्क्रमानुपाती होता है।"},
+                {q: "एक चोक कुंडली एक ऐसी कुंडली है जिसमें...", o: ["उच्च प्रेरकत्व और निम्न प्रतिरोध होता है", "निम्न प्रेरकत्व और उच्च प्रतिरोध होता है", "उच्च प्रेरकत्व और उच्च प्रतिरोध होता है", "निम्न प्रेरकत्व और निम्न प्रतिरोध होता है"], a: "उच्च प्रेरकत्व और निम्न प्रतिरोध होता है", e: "एक चोक कुंडली का उपयोग परिपथ में उच्च-आवृत्ति AC को अवरुद्ध करने के लिए किया जाता है, जबकि DC या निम्न-आवृत्ति AC को गुजरने दिया जाता है। इसके लिए उच्च प्रतिघात के लिए उच्च प्रेरकत्व और बिजली की हानि को कम करने के लिए निम्न प्रतिरोध की आवश्यकता होती है।"},
+                {q: "यदि किसी कुंडली में फेरों की संख्या दोगुनी कर दी जाए, तो उसका स्व-प्रेरकत्व हो जाता है...", o: ["आधा", "दोगुना", "चार गुना", "अपरिवर्तित"], a: "चार गुना", e: "स्व-प्रेरकत्व फेरों की संख्या के वर्ग (N²) के समानुपाती होता है। इसलिए, यदि N को दोगुना किया जाता है, तो L (2N)² = 4N² हो जाता है, यानी मूल मान का चार गुना।"},
+                {q: "गतिक EMF का सूत्र है...", o: ["E = Blv", "E = B/lv", "E = Bl/v", "E = lv/B"], a: "E = Blv", e: "जब लंबाई 'l' का एक चालक वेग 'v' के साथ चुंबकीय क्षेत्र 'B' के लंबवत चलता है, तो प्रेरित EMF, E = Blv द्वारा दिया जाता है।"},
+                {q: "एक AC जनरेटर में, प्रेरित EMF अधिकतम होता है जब कुंडली के अभिलंब और चुंबकीय क्षेत्र के बीच का कोण होता है...", o: ["0°", "45°", "90°", "180°"], a: "90°", e: "प्रेरित EMF, sin(θ) के समानुपाती होता है। यह तब अधिकतम होता है जब sin(θ) अधिकतम होता है, जो θ = 90° पर होता है, जिसका अर्थ है कि कुंडली का तल चुंबकीय क्षेत्र के समानांतर है।"},
+                {q: "एक ट्रांसफार्मर कोर में ऊर्जा हानि का प्राथमिक कारण क्या है?", o: ["शैथिल्य हानि", "भंवर धारा हानि", "A और B दोनों", "कुंडली का प्रतिरोध"], a: "A और B दोनों", e: "शैथिल्य (कोर के बार-बार चुंबकन/विचुंबकन के कारण) और भंवर धाराएँ (कोर में प्रेरित) दोनों एक ट्रांसफार्मर कोर में गर्मी के रूप में महत्वपूर्ण ऊर्जा हानि का कारण बनते हैं।"},
+                {q: "एक ट्रांसफार्मर में अपरिवर्तित रहने वाली मात्रा है...", o: ["वोल्टेज", "धारा", "आवृत्ति", "शक्ति (आदर्श)"], a: "आवृत्ति", e: "एक ट्रांसफार्मर वोल्टेज और धारा के स्तर को बदलता है, लेकिन प्रत्यावर्ती धारा की आवृत्ति प्राथमिक और द्वितीयक कुंडली के बीच समान रहती है। एक आदर्श ट्रांसफार्मर में, शक्ति भी स्थिर रहती है।"},
+                {q: "यदि किसी कुंडली से जुड़ा चुंबकीय फ्लक्स 0.1s में 0.5 Wb बदलता है, तो प्रेरित EMF है:", o: ["5 V", "0.5 V", "0.05 V", "50 V"], a: "5 V", e: "फैराडे के नियम के अनुसार, EMF = -dΦ/dt। दिशा को अनदेखा करते हुए, EMF = ΔΦ / Δt = 0.5 Wb / 0.1 s = 5 V।"}
+            ],
+            hard: [
+                {q: "एक धातु की अंगूठी एक दीवार से जुड़ी हुई है। जब एक छड़ चुंबक को उसकी ओर धकेला जाता है, तो अंगूठी में प्रेरित धारा होगी...", o: ["दक्षिणावर्त", "वामावर्त", "शून्य", "पहले दक्षिणावर्त फिर वामावर्त"], a: "वामावर्त", e: "जैसे ही चुंबक का उत्तरी ध्रुव पास आता है, चुंबकीय फ्लक्स बढ़ता है। लेन्ज़ के नियम के अनुसार, अंगूठी इसे प्रतिकर्षित करने के लिए एक उत्तरी ध्रुव प्रेरित करेगी। दाहिने हाथ के अंगूठे के नियम का उपयोग करते हुए, एक वामावर्त धारा एक उत्तरी ध्रुव बनाती है।"},
+                {q: "2 H का एक प्रेरक और 10 Ω का एक प्रतिरोधक 100 V की बैटरी से जुड़े हैं। परिपथ का समय स्थिरांक है...", o: ["0.2 s", "5 s", "20 s", "0.05 s"], a: "0.2 s", e: "एक LR परिपथ का समय स्थिरांक (τ) सूत्र τ = L/R द्वारा दिया जाता है। यहाँ, τ = 2 H / 10 Ω = 0.2 सेकंड।"},
+                {q: "एक शुद्ध प्रेरणिक AC परिपथ में, वोल्टेज...", o: ["धारा से π/2 आगे होता है", "धारा से π/2 पीछे होता है", "धारा के साथ समान कला में होता है", "धारा से π आगे होता है"], a: "धारा से π/2 आगे होता है", e: "एक शुद्ध प्रेरणिक परिपथ में, धारा को पश्च EMF के विरुद्ध बनने में समय लगता है। परिणामस्वरूप, वोल्टेज तरंगरूप धारा तरंगरूप से 90 डिग्री (या π/2 रेडियन) पहले अपने अधिकतम मान पर पहुँच जाता है।"},
+                {q: "पूर्व से पश्चिम तक फैला 10 मीटर लंबा एक क्षैतिज सीधा तार 5.0 m/s की गति से गिर रहा है, जो पृथ्वी के चुंबकीय क्षेत्र के क्षैतिज घटक, 0.30 × 10⁻⁴ Wb m⁻² के समकोण पर है। प्रेरित EMF का तात्कालिक मान है:", o: ["1.5 mV", "15 mV", "0.15 mV", "150 mV"], a: "1.5 mV", e: "गतिक EMF सूत्र E = Blv का उपयोग करते हुए। E = (0.30 × 10⁻⁴ T) * (10 m) * (5.0 m/s) = 1.5 × 10⁻³ V = 1.5 mV।"},
+                {q: "एक LCR श्रेणी परिपथ का गुणवत्ता कारक (Q-फैक्टर) किसके द्वारा दिया जाता है...", o: ["(1/R)√(L/C)", "(1/R)√(C/L)", "R√(L/C)", "R√(C/L)"], a: "(1/R)√(L/C)", e: "Q-फैक्टर एक LCR परिपथ में अनुनाद की तीक्ष्णता को दर्शाता है। इसे Q = (ω₀L) / R के रूप में परिभाषित किया गया है, और चूंकि ω₀ = 1/√(LC) है, प्रतिस्थापित करने पर Q = (1/R)√(L/C) मिलता है।"},
+                {q: "एक स्टेप-डाउन ट्रांसफार्मर का उपयोग 2.5 kV लाइन पर 80 A की धारा प्रदान करने के लिए किया जाता है। यदि प्राथमिक से द्वितीयक फेरों का अनुपात 20:1 है और दक्षता 80% है, तो इनपुट शक्ति क्या है?", o: ["12.5 kW", "10 kW", "16 kW", "15.625 kW"], a: "12.5 kW", e: "पहले आउटपुट शक्ति P_out = V_s * I_s ज्ञात करें। हमें V_s चाहिए। V_s/V_p = N_s/N_p = 1/20 => V_s = 2500V/20 = 125V। P_out = 125V * 80A = 10000W = 10kW। दक्षता = P_out / P_in => P_in = P_out / दक्षता = 10kW / 0.80 = 12.5 kW।"},
+                {q: "15 फेरे/सेमी वाली एक लंबी परिनालिका के अंदर 2.0 सेमी² क्षेत्रफल का एक छोटा लूप रखा गया है। यदि परिनालिका में धारा 0.1 सेकंड में 2.0 A से 4.0 A में बदल जाती है, तो लूप में प्रेरित EMF क्या है?", o: ["7.5 μV", "15 μV", "3.75 μV", "0.75 μV"], a: "7.5 μV", e: "B = μ₀nI. EMF = -A * (dB/dt) = -Aμ₀n(dI/dt). n=15 फेरे/सेमी = 1500 फेरे/मी. dI/dt = (4-2)/0.1 = 20 A/s. EMF = (2x10⁻⁴ m²)(4πx10⁻⁷)(1500)(20) ≈ 7.54x10⁻⁶ V = 7.5 μV."},
+                {q: "एक प्रेरक में संग्रहीत ऊर्जा का सूत्र है...", o: ["(1/2)LI", "(1/2)L²I", "(1/2)LI²", "(1/2)L/I²"], a: "(1/2)LI²", e: "प्रेरकत्व L और धारा I वाले एक प्रेरक के चुंबकीय क्षेत्र में संग्रहीत ऊर्जा (U) सूत्र U = (1/2)LI² द्वारा दी जाती है।"},
+                {q: "अन्योन्य प्रेरकत्व का विमीय सूत्र क्या है?", o: ["[ML²T⁻²A⁻²]", "[MLT⁻²A⁻¹]", "[ML²T⁻¹A⁻²]", "[ML²T⁻³A⁻²]"], a: "[ML²T⁻²A⁻²]", e: "EMF (E) = -M(dI/dt). तो, M = -E / (dI/dt). EMF का विमीय सूत्र [ML²T⁻³A⁻¹] (कार्य/आवेश) है, और dI/dt [AT⁻¹] है। इसलिए, M = [ML²T⁻³A⁻¹] / [AT⁻¹] = [ML²T⁻²A⁻²]।"}
+            ]
         },
         semiconductors: {
             easy: [
@@ -580,8 +632,28 @@ const quizDataSource = {
                 {q: "अग्र अभिनति में, एक p-n जंक्शन डायोड की अवक्षय परत की चौड़ाई...", o: ["बढ़ती है", "घटती है", "अपरिवर्तित रहती है", "पहले बढ़ती है फिर घटती है"], a: "घटती है", e: "एक अग्र अभिनति वोल्टेज लगाने से अंतर्निहित क्षमता का विरोध होता है, अवक्षय परत की चौड़ाई कम हो जाती है और धारा को प्रवाहित होने दिया जाता है।"},
                 {q: "किस लॉजिक गेट को सार्वभौमिक गेट के रूप में जाना जाता है?", o: ["AND गेट", "OR गेट", "NOT गेट", "NAND गेट"], a: "NAND गेट", e: "NAND और NOR दोनों गेटों को सार्वभौमिक गेट कहा जाता है क्योंकि कोई भी अन्य लॉजिक गेट (जैसे AND, OR, NOT) केवल NAND गेटों या केवल NOR गेटों का उपयोग करके बनाया जा सकता है।"}
             ],
-            medium: [/* 9 questions */],
-            hard: [/* 9 questions */]
+            medium: [
+                {q: "एक जेनर डायोड का मुख्य रूप से उपयोग किया जाता है...", o: ["दिष्टकारी के रूप में", "प्रवर्धक के रूप में", "वोल्टेज नियामक के रूप में", "दोलित्र के रूप में"], a: "वोल्टेज नियामक के रूप में", e: "एक जेनर डायोड को पश्च भंजन क्षेत्र में काम करने के लिए डिज़ाइन किया गया है, जो इसके आर-पार लगभग स्थिर वोल्टेज बनाए रखता है, जिससे यह वोल्टेज विनियमन के लिए आदर्श बन जाता है।"},
+                {q: "एक उभयनिष्ठ-उत्सर्जक (CE) प्रवर्धक में, आउटपुट वोल्टेज होता है...", o: ["इनपुट के साथ समान कला में", "इनपुट से 180° कला से बाहर", "इनपुट से 90° कला से बाहर", "इनपुट से 45° कला से बाहर"], a: "इनपुट से 180° कला से बाहर", e: "एक CE विन्यास में, आधार धारा में एक छोटी सी वृद्धि संग्राहक धारा में एक बड़ी वृद्धि का कारण बनती है, जो बदले में संग्राहक प्रतिरोधक के आर-पार वोल्टेज में एक बड़ी गिरावट का कारण बनती है। इसके परिणामस्वरूप एक उलटा या 180° कला-विस्थापित आउटपुट सिग्नल मिलता है।"},
+                {q: "एक दिष्टकारी का क्या कार्य है?", o: ["AC को DC में बदलना", "DC को AC में बदलना", "सिग्नल को प्रवर्धित करना", "वोल्टेज को नियंत्रित करना"], a: "AC को DC में बदलना", e: "एक दिष्टकारी एक विद्युत उपकरण है जो प्रत्यावर्ती धारा (AC), जो समय-समय पर दिशा बदलती है, को दिष्ट धारा (DC) में परिवर्तित करता है, जो केवल एक दिशा में बहती है।"},
+                {q: "एक NOR गेट के लिए बूलियन व्यंजक है...", o: ["Y = A . B", "Y = A + B", "Y = (A + B)'", "Y = (A . B)'"], a: "Y = (A + B)'", e: "एक NOR गेट एक OR गेट होता है जिसके बाद एक NOT गेट होता है। OR के लिए व्यंजक A + B है, और NOT ऑपरेशन को प्राइम (') द्वारा दर्शाया जाता है, इसलिए NOR व्यंजक Y = (A + B)' है।"},
+                {q: "एक LED किस प्रकार का उपकरण है?", o: ["फोटोवोल्टिक सेल", "अत्यधिक डोपित p-n जंक्शन", "धातु-अर्धचालक जंक्शन", "नैज अर्धचालक"], a: "अत्यधिक डोपित p-n जंक्शन", e: "एक प्रकाश उत्सर्जक डायोड (LED) एक अत्यधिक डोपित p-n जंक्शन डायोड है जो, अग्र अभिनति के तहत, सहज विकिरण उत्सर्जित करता है। रंग उपयोग किए गए अर्धचालक पदार्थ पर निर्भर करता है।"},
+                {q: "एक ट्रांजिस्टर का धारा लाभ (β) परिभाषित किया गया है...", o: ["Ic / Ib", "Ic / Ie", "Ie / Ib", "Ib / Ic"], a: "Ic / Ib", e: "एक उभयनिष्ठ-उत्सर्जक विन्यास में, DC धारा लाभ, बीटा (β), संग्राहक धारा (Ic) और आधार धारा (Ib) का अनुपात है।"},
+                {q: "एक फोटोडायोड को संचालित किया जाता है...", o: ["अग्र अभिनति में", "पश्च अभिनति में", "बिना अभिनति के", "भंजन क्षेत्र में"], a: "पश्च अभिनति में", e: "फोटोडायोड को पश्च अभिनति में संचालित किया जाता है क्योंकि पश्च धारा उस पर पड़ने वाले प्रकाश की तीव्रता के सीधे आनुपातिक होती है, जिससे यह एक अच्छा प्रकाश संसूचक बन जाता है।"},
+                {q: "किस प्रकार के दिष्टकारी के आउटपुट में सबसे अधिक ऊर्मिका होती है?", o: ["पूर्ण-तरंग दिष्टकारी", "ब्रिज दिष्टकारी", "अर्ध-तरंग दिष्टकारी", "वोल्टेज डबलर"], a: "अर्ध-तरंग दिष्टकारी", e: "एक अर्ध-तरंग दिष्टकारी AC चक्र के केवल आधे हिस्से का उपयोग करता है, जिसके परिणामस्वरूप DC आउटपुट में स्पंदों के बीच एक बड़ा अंतर होता है। यह पूर्ण-तरंग दिष्टकारी की तुलना में एक उच्च ऊर्मिका कारक बनाता है।"},
+                {q: "कमरे के तापमान पर जर्मेनियम (Ge) के लिए निषिद्ध ऊर्जा अंतराल लगभग है...", o: ["1.1 eV", "0.72 eV", "5.4 eV", "0.3 eV"], a: "0.72 eV", e: "जर्मेनियम के लिए बैंड गैप लगभग 0.72 eV है, जो सिलिकॉन (लगभग 1.1 eV) से छोटा है। यह Ge को अधिक सुचालक बनाता है लेकिन तापमान परिवर्तन के प्रति अधिक संवेदनशील भी बनाता है।"}
+            ],
+            hard: [
+                {q: "एक दोलित्र एक प्रवर्धक है जिसमें...", o: ["धनात्मक पुनर्भरण होता है", "ऋणात्मक पुनर्भरण होता है", "कोई पुनर्भरण नहीं होता है", "धनात्मक और ऋणात्मक दोनों पुनर्भरण होते हैं"], a: "धनात्मक पुनर्भरण होता है", e: "एक दोलित्र बिना किसी इनपुट सिग्नल के एक आवधिक तरंगरूप उत्पन्न करता है। यह दोलनों को बनाए रखने के लिए धनात्मक पुनर्भरण का उपयोग करता है, जहां आउटपुट सिग्नल का एक अंश इनपुट में समान कला में वापस भेजा जाता है।"},
+                {q: "दिए गए लॉजिक परिपथ का आउटपुट (एक इनपुट A को दो-इनपुट NAND गेट में दिया जाता है जिसके इनपुट शॉर्ट किए गए हैं) है:", o: ["A", "1", "0", "A' (NOT A)"], a: "A' (NOT A)", e: "जब एक NAND गेट के दोनों इनपुट एक साथ बंधे होते हैं (A), तो व्यंजक (A . A)' हो जाता है। बूलियन बीजगणित के अनुसार, A . A = A, इसलिए व्यंजक A' तक सरल हो जाता है। इसका मतलब है कि NAND गेट एक NOT गेट के रूप में कार्य करता है।"},
+                {q: "एक पूर्ण-तरंग दिष्टकारी में, यदि इनपुट आवृत्ति 50 Hz है, तो आउटपुट ऊर्मिका आवृत्ति है...", o: ["50 Hz", "25 Hz", "100 Hz", "200 Hz"], a: "100 Hz", e: "एक पूर्ण-तरंग दिष्टकारी AC इनपुट के ऋणात्मक अर्ध-चक्र को उलट देता है। इसका मतलब है कि प्रत्येक एक इनपुट चक्र के लिए दो आउटपुट स्पंद होते हैं। इसलिए, ऊर्मिका आवृत्ति इनपुट आवृत्ति से दोगुनी होती है (2 * 50 Hz = 100 Hz)।"},
+                {q: "एक ट्रांजिस्टर की ट्रांसकंडक्टेंस (gm) का एक माप है...", o: ["इनपुट धारा पर इनपुट वोल्टेज नियंत्रण", "इनपुट धारा पर आउटपुट वोल्टेज नियंत्रण", "आउटपुट धारा पर इनपुट वोल्टेज नियंत्रण", "आउटपुट धारा पर आउटपुट वोल्टेज नियंत्रण"], a: "आउटपुट धारा पर इनपुट वोल्टेज नियंत्रण", e: "ट्रांसकंडक्टेंस (gm) आउटपुट धारा (जैसे, संग्राहक धारा) में परिवर्तन और इनपुट वोल्टेज (जैसे, आधार-उत्सर्जक वोल्टेज) में परिवर्तन का अनुपात है। यह बताता है कि इनपुट वोल्टेज आउटपुट धारा को कितनी प्रभावी ढंग से नियंत्रित करता है।"},
+                {q: "एक BJT में आधार क्षेत्र का प्राथमिक कार्य क्या है?", o: ["बहुसंख्यक वाहकों को उत्सर्जक से संग्राहक तक प्रवाहित होने देना", "धारा के प्रवाह को रोकना", "उत्सर्जक से संग्राहक तक अल्पसंख्यक वाहकों के प्रवाह को नियंत्रित करना", "आवेश वाहकों का उत्सर्जन करना"], a: "उत्सर्जक से संग्राहक तक अल्पसंख्यक वाहकों के प्रवाह को नियंत्रित करना", e: "आधार एक बहुत पतला, हल्का डोपित क्षेत्र है। आधार में एक छोटी धारा उत्सर्जक से संग्राहक तक एक बहुत बड़े धारा प्रवाह को नियंत्रित करती है, जो अनिवार्य रूप से आवेश वाहकों के लिए एक वाल्व के रूप में कार्य करती है।"},
+                {q: "डी मॉर्गन के प्रमेय के अनुसार, (A + B)' बराबर है...", o: ["A' + B'", "A' . B'", "A . B", "(A' . B')'"], a: "A' . B'", e: "डी मॉर्गन का पहला प्रमेय कहता है कि एक योग का पूरक पूरकों के गुणनफल के बराबर होता है। इस प्रकार, (A + B)' = A' . B'।"},
+                {q: "एक ट्रांजिस्टर का धारा लाभ (β) 100 है। यदि आधार धारा 20 μA है, तो संग्राहक धारा क्या है?", o: ["2000 mA", "2 mA", "0.2 mA", "20 mA"], a: "2 mA", e: "धारा लाभ β = Ic / Ib। इसलिए, संग्राहक धारा Ic = β * Ib। Ic = 100 * 20 μA = 2000 μA = 2 mA।"},
+                {q: "अर्धचालकों में 'डोपिंग प्रतिकार' क्या है?", o: ["दाता और स्वीकर्ता दोनों अशुद्धियों को जोड़ना", "सभी अशुद्धियों को हटाना", "तापमान बढ़ाना", "एक चुंबकीय क्षेत्र का उपयोग करना"], a: "दाता और स्वीकर्ता दोनों अशुद्धियों को जोड़ना", e: "प्रतिकार एक p-प्रकार के अर्धचालक में दाता अशुद्धियों को जोड़ने या एक n-प्रकार के अर्धचालक में स्वीकर्ता अशुद्धियों को जोड़ने की प्रक्रिया है। पदार्थ p-प्रकार या n-प्रकार का रहता है लेकिन इसकी बहुसंख्यक वाहक सांद्रता कम हो जाती है।"},
+                {q: "एक लॉजिक परिपथ जो एक बिट जानकारी संग्रहीत कर सकता है, कहलाता है...", o: ["मल्टीप्लेक्सर", "एनकोडर", "फ्लिप-फ्लॉप", "डिकोडर"], a: "फ्लिप-फ्लॉप", e: "एक फ्लिप-फ्लॉप (या लैच) एक बिस्टेबल मल्टीवाइब्रेटर है। इसकी दो स्थिर अवस्थाएँ होती हैं और इसका उपयोग स्थिति की जानकारी संग्रहीत करने के लिए किया जा सकता है, जिससे यह डिजिटल मेमोरी का मौलिक बिल्डिंग ब्लॉक बन जाता है।"}
+            ]
         }
     },
     or: {
@@ -597,8 +669,28 @@ const quizDataSource = {
                 {q: "ଏକ ଷ୍ଟେପ୍-ଅପ୍ ଟ୍ରାନ୍ସଫର୍ମର କ'ଣ କରେ?", o: ["ଭୋଲଟେଜ୍ ବଢାଏ, ସ୍ରୋତ କମାଏ", "ଭୋଲଟେଜ୍ କମାଏ, ସ୍ରୋତ ବଢାଏ", "ଉଭୟ ଭୋଲଟେଜ୍ ଏବଂ ସ୍ରୋତ ବଢାଏ", "ଉଭୟ ଭୋଲଟେଜ୍ ଏବଂ ସ୍ରୋତ କମାଏ"], a: "ଭୋଲଟେଜ୍ ବଢାଏ, ସ୍ରୋତ କମାଏ", e: "ଏକ ଷ୍ଟେପ୍-ଅପ୍ ଟ୍ରାନ୍ସଫର୍ମର ପ୍ରାଥମିକରୁ ଦ୍ୱିତୀୟକ ପର୍ଯ୍ୟନ୍ତ ଭୋଲଟେଜ୍ ବଢାଏ, ଏବଂ ଫଳସ୍ୱରୂପ ଶକ୍ତି ସଂରକ୍ଷଣ ପାଇଁ ସ୍ରୋତ କମାଏ।"},
                 {q: "ଏକ କଏଲର ପ୍ରେରକତା କେଉଁଥିରେ ମାପ କରାଯାଏ?", o: ["ଫାରାଡ୍", "ଓମ୍", "ହେନେରୀ", "ୱେବର୍"], a: "ହେନେରୀ", e: "ପ୍ରେରକତା ହେଉଛି ଏକ ବୈଦ୍ୟୁତିକ କଣ୍ଡକ୍ଟରର ଗୁଣ ଯାହା ଦ୍ୱାରା ଏହା ମାଧ୍ୟମରେ ସ୍ରୋତର ପରିବର୍ତ୍ତନ ଏକ ଇଲେକ୍ଟ୍ରୋମୋଟିଭ୍ ଫୋର୍ସ ପ୍ରେରିତ କରେ। ଏହାର SI ଏକକ ହେନେରୀ (H) ଅଟେ।"}
             ],
-            medium: [/* 9 questions */],
-            hard: [/* 9 questions */]
+            medium: [
+                {q: "ଏଡି ସ୍ରୋତ କେବେ ଉତ୍ପନ୍ନ ହୁଏ?", o: ["ଯେତେବେଳେ ଏକ ଧାତୁକୁ ପରିବର୍ତ୍ତନଶୀଳ ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ରରେ ରଖାଯାଏ", "ଯେତେବେଳେ ଏକ ଧାତୁକୁ ସ୍ଥିର ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ରରେ ରଖାଯାଏ", "ଯେତେବେଳେ ଏକ ବୃତ୍ତାକାର କଏଲକୁ ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ରରେ ରଖାଯାଏ", "ଯେତେବେଳେ ଏକ ବୃତ୍ତାକାର କଏଲ ଦେଇ ସ୍ରୋତ ପ୍ରବାହିତ ହୁଏ"], a: "ଯେତେବେଳେ ଏକ ଧାତୁକୁ ପରିବର୍ତ୍ତନଶୀଳ ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ରରେ ରଖାଯାଏ", e: "ଫାରାଡେଙ୍କ ପ୍ରେରଣ ନିୟମ ଅନୁଯାୟୀ, ଏଡି ସ୍ରୋତ ହେଉଛି କଣ୍ଡକ୍ଟରରେ ପରିବର୍ତ୍ତନଶୀଳ ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ର ଦ୍ୱାରା କଣ୍ଡକ୍ଟର ଭିତରେ ପ୍ରେରିତ ବିଦ୍ୟୁତ୍ ସ୍ରୋତର ଲୁପ୍।"},
+                {q: "ଏକ ଲମ୍ବା ସୋଲେନଏଡର ଆତ୍ମ-ପ୍ରେରକତା କାହା ସହିତ ସମାନୁପାତିକ? (N ହେଉଛି ପେঁচ ସଂଖ୍ୟା, A ହେଉଛି କ୍ଷେତ୍ରଫଳ, l ହେଉଛି ଦୈର୍ଘ୍ୟ)", o: ["N A / l", "N^2 A / l", "N A^2 / l", "N^2 A^2 / l"], a: "N^2 A / l", e: "ଏକ ସୋଲେନଏଡର ଆତ୍ମ-ପ୍ରେରକତା L, L = (μ₀ * N² * A) / l ଦ୍ୱାରା ଦିଆଯାଏ, ତେଣୁ ଏହା ପେঁচ ସଂଖ୍ୟାର ବର୍ଗ ଏବଂ କ୍ଷେତ୍ରଫଳ ସହିତ ସିଧାସଳଖ ଆନୁପାତିକ ଏବଂ ଦୈର୍ଘ୍ୟ ସହିତ ବିପରୀତ ଆନୁପାତିକ।"},
+                {q: "ଏକ ଚୋକ୍ କଏଲ୍ ହେଉଛି ଏକ କଏଲ୍ ଯେଉଁଥିରେ...", o: ["ଉଚ୍ଚ ପ୍ରେରକତା ଏବଂ ନିମ୍ନ ପ୍ରତିରୋଧ ଥାଏ", "ନିମ୍ନ ପ୍ରେରକତା ଏବଂ ଉଚ୍ଚ ପ୍ରତିରୋଧ ଥାଏ", "ଉଚ୍ଚ ପ୍ରେରକତା ଏବଂ ଉଚ୍ଚ ପ୍ରତିରୋଧ ଥାଏ", "ନିମ୍ନ ପ୍ରେରକତା ଏବଂ ନିମ୍ନ ପ୍ରତିରୋଧ ଥାଏ"], a: "ଉଚ୍ଚ ପ୍ରେରକତା ଏବଂ ନିମ୍ନ ପ୍ରତିରୋଧ ଥାଏ", e: "ଏକ ଚୋକ୍ କଏଲ୍ ଏକ ସର୍କିଟରେ ଉଚ୍ଚ-ଆବୃତ୍ତି AC କୁ ଅବରୋଧ କରିବା ପାଇଁ ବ୍ୟବହୃତ ହୁଏ, ଯେତେବେଳେ କି DC କିମ୍ବା ନିମ୍ନ-ଆବୃତ୍ତି AC କୁ ଯିବାକୁ ଦେଇଥାଏ। ଏଥିପାଇଁ ଉଚ୍ଚ ପ୍ରତିକ୍ରିୟା ପାଇଁ ଉଚ୍ଚ ପ୍ରେରକତା ଏବଂ ଶକ୍ତି କ୍ଷତିକୁ କମ୍ କରିବା ପାଇଁ ନିମ୍ନ ପ୍ରତିରୋଧ ଆବଶ୍ୟକ।"},
+                {q: "ଯଦି ଏକ କଏଲରେ ପେঁচ ସଂଖ୍ୟା ଦ୍ୱିଗୁଣିତ ହୁଏ, ତେବେ ଏହାର ଆତ୍ମ-ପ୍ରେରକତା ହୁଏ...", o: ["ଅଧା", "ଦୁଇଗୁଣ", "ଚାରିଗୁଣ", "ଅପରିବର୍ତ୍ତିତ"], a: "ଚାରିଗୁଣ", e: "ଆତ୍ମ-ପ୍ରେରକତା ପେঁচ ସଂଖ୍ୟାର ବର୍ଗ (N²) ସହିତ ସମାନୁପାତିକ। ତେଣୁ, ଯଦି N ଦ୍ୱିଗୁଣିତ ହୁଏ, ତେବେ L (2N)² = 4N² ହୁଏ, ଅର୍ଥାତ୍ ମୂଳ ମୂଲ୍ୟର ଚାରିଗୁଣ।"},
+                {q: "ଗତିଶୀଳ EMF ର ସୂତ୍ର ହେଉଛି...", o: ["E = Blv", "E = B/lv", "E = Bl/v", "E = lv/B"], a: "E = Blv", e: "ଯେତେବେଳେ 'l' ଦୈର୍ଘ୍ୟର ଏକ କଣ୍ଡକ୍ଟର 'v' ବେଗରେ 'B' ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ରରେ ଲମ୍ବ ଭାବରେ ଗତି କରେ, ପ୍ରେରିତ EMF, E = Blv ଦ୍ୱାରା ଦିଆଯାଏ।"},
+                {q: "ଏକ AC ଜେନେରେଟରରେ, ପ୍ରେରିତ EMF ସର୍ବାଧିକ ହୁଏ ଯେତେବେଳେ କଏଲର ଅଭିଲମ୍ବ ଏବଂ ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ର ମଧ୍ୟରେ କୋଣ ହୁଏ...", o: ["0°", "45°", "90°", "180°"], a: "90°", e: "ପ୍ରେରିତ EMF, sin(θ) ସହିତ ସମାନୁପାତିକ। ଏହା ସର୍ବାଧିକ ହୁଏ ଯେତେବେଳେ sin(θ) ସର୍ବାଧିକ ହୁଏ, ଯାହା θ = 90° ରେ ହୁଏ, ଅର୍ଥାତ୍ କଏଲର ସମତଳ ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ର ସହିତ ସମାନ୍ତର।"},
+                {q: "ଏକ ଟ୍ରାନ୍ସଫର୍ମର କୋରରେ ଶକ୍ତି କ୍ଷତିର ମୂଳ କାରଣ କ'ଣ?", o: ["ହିଷ୍ଟେରେସିସ୍ କ୍ଷତି", "ଏଡି ସ୍ରୋତ କ୍ଷତି", "A ଏବଂ B ଉଭୟ", "ୱାଇଣ୍ଡିଂର ପ୍ରତିରୋଧ"], a: "A ଏବଂ B ଉଭୟ", e: "ହିଷ୍ଟେରେସିସ୍ (କୋରର ବାରମ୍ବାର ଚୁମ୍ବକୀକରଣ/ବିଚୁମ୍ବକୀକରଣ ହେତୁ) ଏବଂ ଏଡି ସ୍ରୋତ (କୋରରେ ପ୍ରେରିତ) ଉଭୟ ଏକ ଟ୍ରାନ୍ସଫର୍ମର କୋରରେ ଉତ୍ତାପ ଭାବରେ ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ ଶକ୍ତି କ୍ଷତିର କାରଣ ହୁଅନ୍ତି।"},
+                {q: "ଏକ ଟ୍ରାନ୍ସଫର୍ମରରେ ଅପରିବର୍ତ୍ତିତ ରହୁଥିବା ରାଶି ହେଉଛି...", o: ["ଭୋଲଟେଜ୍", "ସ୍ରୋତ", "ଆବୃତ୍ତି", "ଶକ୍ତି (ଆଦର୍ଶ)"], a: "ଆବୃତ୍ତି", e: "ଏକ ଟ୍ରାନ୍ସଫର୍ମର ଭୋଲଟେଜ୍ ଏବଂ ସ୍ରୋତ ସ୍ତରକୁ ପରିବର୍ତ୍ତନ କରେ, କିନ୍ତୁ ପ୍ରାଥମିକ ଏବଂ ଦ୍ୱିତୀୟକ କଏଲ ମଧ୍ୟରେ AC ର ଆବୃତ୍ତି ସମାନ ରହେ। ଏକ ଆଦର୍ଶ ଟ୍ରାନ୍ସଫର୍ମରରେ, ଶକ୍ତି ମଧ୍ୟ ସ୍ଥିର ରହେ।"},
+                {q: "ଯଦି ଏକ କଏଲ ସହିତ ସଂଯୁକ୍ତ ଚୁମ୍ବକୀୟ ଫ୍ଲକ୍ସ 0.1s ରେ 0.5 Wb ପରିବର୍ତ୍ତନ ହୁଏ, ତେବେ ପ୍ରେରିତ EMF ହେଉଛି:", o: ["5 V", "0.5 V", "0.05 V", "50 V"], a: "5 V", e: "ଫାରାଡେଙ୍କ ନିୟମ ଅନୁଯାୟୀ, EMF = -dΦ/dt। ଦିଗକୁ ଅଣଦେଖା କରି, EMF = ΔΦ / Δt = 0.5 Wb / 0.1 s = 5 V।"}
+            ],
+            hard: [
+                {q: "ଏକ ଧାତବ ରିଙ୍ଗକୁ କାନ୍ଥରେ ଲଗାଯାଇଛି। ଯେତେବେଳେ ଏକ ବାର୍ ଚୁମ୍ବକକୁ ଏହା ଆଡକୁ ଠେଲାଯାଏ, ରିଙ୍ଗରେ ପ୍ରେରିତ ସ୍ରୋତ ହେବ...", o: ["ଘଣ୍ଟାକଣ୍ଟା ଦିଗରେ", "ଘଣ୍ଟାକଣ୍ଟା ବିପରୀତ ଦିଗରେ", "ଶୂନ", "ପ୍ରଥମେ ଘଣ୍ଟାକଣ୍ଟା ଦିଗରେ ପରେ ବିପରୀତ ଦିଗରେ"], a: "ଘଣ୍ଟାକଣ୍ଟା ବିପରୀତ ଦିଗରେ", e: "ଯେହେତୁ ଚୁମ୍ବକର ଉତ୍ତର ମେରୁ ନିକଟବର୍ତ୍ତୀ ହୁଏ, ଚୁମ୍ବକୀୟ ଫ୍ଲକ୍ସ ବୃଦ୍ଧି ପାଏ। ଲେଞ୍ଜଙ୍କ ନିୟମ ଅନୁଯାୟୀ, ରିଙ୍ଗ ଏହାକୁ ବିକର୍ଷଣ କରିବା ପାଇଁ ଏକ ଉତ୍ତର ମେରୁ ପ୍ରେରିତ କରିବ। ଦକ୍ଷିଣ-ହସ୍ତ ଅଙ୍ଗୁଷ୍ଠ ନିୟମ ବ୍ୟବହାର କରି, ଏକ ଘଣ୍ଟାକଣ୍ଟା ବିପରୀତ ଦିଗର ସ୍ରୋତ ଏକ ଉତ୍ତର ମେରୁ ସୃଷ୍ଟି କରେ।"},
+                {q: "2 H ର ଏକ ଇଣ୍ଡକ୍ଟର ଏବଂ 10 Ω ର ଏକ ପ୍ରତିରୋଧକକୁ 100 V ବ୍ୟାଟେରୀ ସହିତ ସଂଯୋଗ କରାଯାଇଛି। ସର୍କିଟର ସମୟ ସ୍ଥିରାଙ୍କ ହେଉଛି...", o: ["0.2 s", "5 s", "20 s", "0.05 s"], a: "0.2 s", e: "ଏକ LR ସର୍କିଟର ସମୟ ସ୍ଥିରାଙ୍କ (τ) ସୂତ୍ର τ = L/R ଦ୍ୱାରା ଦିଆଯାଇଛି। ଏଠାରେ, τ = 2 H / 10 Ω = 0.2 ସେକେଣ୍ଡ।"},
+                {q: "ଏକ ଶୁଦ୍ଧ ଇଣ୍ଡକ୍ଟିଭ୍ AC ସର୍କିଟରେ, ଭୋଲଟେଜ୍...", o: ["ସ୍ରୋତଠାରୁ π/2 ଆଗରେ ଥାଏ", "ସ୍ରୋତଠାରୁ π/2 ପଛରେ ଥାଏ", "ସ୍ରୋତ ସହିତ ସମାନ କଳାରେ ଥାଏ", "ସ୍ରୋତଠାରୁ π ଆଗରେ ଥାଏ"], a: "ସ୍ରୋତଠାରୁ π/2 ଆଗରେ ଥାଏ", e: "ଏକ ଶୁଦ୍ଧ ଇଣ୍ଡକ୍ଟିଭ୍ ସର୍କିଟରେ, ବ୍ୟାକ୍ EMF ବିରୁଦ୍ଧରେ ସ୍ରୋତ ସୃଷ୍ଟି ହେବାକୁ ସମୟ ଲାଗେ। ଫଳସ୍ୱରୂପ, ଭୋଲଟେଜ୍ ତରଙ୍ଗ ସ୍ରୋତ ତରଙ୍ଗଠାରୁ 90 ଡିଗ୍ରୀ (କିମ୍ବା π/2 ରେଡିଆନ୍) ପୂର୍ବରୁ ଏହାର ସର୍ବାଧିକ ମୂଲ୍ୟରେ ପହଞ୍ଚିଥାଏ।"},
+                {q: "ପୂର୍ବରୁ ପଶ୍ଚିମକୁ ବିସ୍ତୃତ 10 ମିଟର ଲମ୍ବର ଏକ ଭୂସମାନ୍ତର ସିଧା ତାର 5.0 m/s ବେଗରେ ପୃଥିବୀର ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ରର ଭୂସମାନ୍ତର ଉପାଦାନ 0.30 × 10⁻⁴ Wb m⁻² ସହିତ ସମକୋଣରେ ପଡୁଛି। ପ୍ରେରିତ EMF ର ତାତ୍କ୍ଷଣିକ ମୂଲ୍ୟ ହେଉଛି:", o: ["1.5 mV", "15 mV", "0.15 mV", "150 mV"], a: "1.5 mV", e: "ଗତିଶୀଳ EMF ସୂତ୍ର E = Blv ବ୍ୟବହାର କରି। E = (0.30 × 10⁻⁴ T) * (10 m) * (5.0 m/s) = 1.5 × 10⁻³ V = 1.5 mV।"},
+                {q: "ଏକ LCR ଶ୍ରେଣୀ ସର୍କିଟର ଗୁଣବତ୍ତା କାରକ (Q-factor) କାହା ଦ୍ୱାରା ଦିଆଯାଏ...", o: ["(1/R)√(L/C)", "(1/R)√(C/L)", "R√(L/C)", "R√(C/L)"], a: "(1/R)√(L/C)", e: "Q-factor ଏକ LCR ସର୍କିଟରେ ଅନୁନାଦର ତୀକ୍ଷ୍ଣତାକୁ ଦର୍ଶାଏ। ଏହାକୁ Q = (ω₀L) / R ଭାବରେ ବ୍ୟାଖ୍ୟା କରାଯାଇଛି, ଏବଂ ଯେହେତୁ ω₀ = 1/√(LC), ପ୍ରତିସ୍ଥାପନ କଲେ Q = (1/R)√(L/C) ମିଳେ।"},
+                {q: "ଏକ ଷ୍ଟେପ୍-ଡାଉନ୍ ଟ୍ରାନ୍ସଫର୍ମରକୁ 2.5 kV ଲାଇନରେ 80 A ସ୍ରୋତ ଯୋଗାଇବା ପାଇଁ ବ୍ୟବହାର କରାଯାଏ। ଯଦି ପ୍ରାଥମିକରୁ ଦ୍ୱିତୀୟକ ପେঁচ ଅନୁପାତ 20:1 ଏବଂ ଦକ୍ଷତା 80% ହୁଏ, ତେବେ ଇନପୁଟ୍ ଶକ୍ତି କେତେ?", o: ["12.5 kW", "10 kW", "16 kW", "15.625 kW"], a: "12.5 kW", e: "ପ୍ରଥମେ ଆଉଟପୁଟ୍ ଶକ୍ତି P_out = V_s * I_s ଖୋଜନ୍ତୁ। ଆମକୁ V_s ଦରକାର। V_s/V_p = N_s/N_p = 1/20 => V_s = 2500V/20 = 125V। P_out = 125V * 80A = 10000W = 10kW। ଦକ୍ଷତା = P_out / P_in => P_in = P_out / ଦକ୍ଷତା = 10kW / 0.80 = 12.5 kW।"},
+                {q: "15 ପେঁচ/ସେମି ଥିବା ଏକ ଲମ୍ବା ସୋଲେନଏଡ୍ ଭିତରେ 2.0 ସେମି² କ୍ଷେତ୍ରଫଳର ଏକ ଛୋଟ ଲୁପ୍ ରଖାଯାଇଛି। ଯଦି ସୋଲେନଏଡରେ ସ୍ରୋତ 0.1 ସେକେଣ୍ଡରେ 2.0 A ରୁ 4.0 A କୁ ପରିବର୍ତ୍ତନ ହୁଏ, ତେବେ ଲୁପରେ ପ୍ରେରିତ EMF କେତେ?", o: ["7.5 μV", "15 μV", "3.75 μV", "0.75 μV"], a: "7.5 μV", e: "B = μ₀nI. EMF = -A * (dB/dt) = -Aμ₀n(dI/dt). n=15 ପେঁচ/ସେମି = 1500 ପେঁচ/ମି. dI/dt = (4-2)/0.1 = 20 A/s. EMF = (2x10⁻⁴ m²)(4πx10⁻⁷)(1500)(20) ≈ 7.54x10⁻⁶ V = 7.5 μV."},
+                {q: "ଏକ ଇଣ୍ଡକ୍ଟରରେ ସଂରକ୍ଷିତ ଶକ୍ତିର ସୂତ୍ର ହେଉଛି...", o: ["(1/2)LI", "(1/2)L²I", "(1/2)LI²", "(1/2)L/I²"], a: "(1/2)LI²", e: "ଇଣ୍ଡକ୍ଟାନ୍ସ L ଏବଂ ସ୍ରୋତ I ଥିବା ଏକ ଇଣ୍ଡକ୍ଟରର ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ରରେ ସଂରକ୍ଷିତ ଶକ୍ତି (U) ସୂତ୍ର U = (1/2)LI² ଦ୍ୱାରା ଦିଆଯାଏ।"},
+                {q: "ପାରସ୍ପରିକ ପ୍ରେରକତା ପାଇଁ ଆୟାମୀ ସୂତ୍ର କ'ଣ?", o: ["[ML²T⁻²A⁻²]", "[MLT⁻²A⁻¹]", "[ML²T⁻¹A⁻²]", "[ML²T⁻³A⁻²]"], a: "[ML²T⁻²A⁻²]", e: "EMF (E) = -M(dI/dt). ତେଣୁ, M = -E / (dI/dt). EMF ର ଆୟାମ ହେଉଛି [ML²T⁻³A⁻¹] (କାର୍ଯ୍ୟ/ଚାର୍ଜ), ଏବଂ dI/dt ହେଉଛି [AT⁻¹]। ତେଣୁ, M = [ML²T⁻³A⁻¹] / [AT⁻¹] = [ML²T⁻²A⁻²]।"}
+            ]
         },
         semiconductors: {
             easy: [
@@ -612,20 +704,33 @@ const quizDataSource = {
                 {q: "ଫରୱାର୍ଡ ବାୟାସରେ, ଏକ p-n ଜଙ୍କସନ୍ ଡାୟୋଡର ଡିପ୍ଲେସନ୍ ସ୍ତରର ମୋଟେଇ...", o: ["ବଢିଥାଏ", "କମିଥାଏ", "ଅପରିବର୍ତ୍ତିତ ରହେ", "ପ୍ରଥମେ ବଢି ପରେ କମିଥାଏ"], a: "କମିଥାଏ", e: "ଏକ ଫରୱାର୍ଡ ବାୟାସ୍ ଭୋଲଟେଜ୍ ପ୍ରୟୋଗ କରିବା ଦ୍ୱାରା ଅନ୍ତର୍ନିହିତ ସମ୍ଭାବନାକୁ ବିରୋଧ କରେ, ଡିପ୍ଲେସନ୍ ସ୍ତରର ମୋଟେଇ କମାଇଥାଏ ଏବଂ ସ୍ରୋତକୁ ପ୍ରବାହିତ ହେବାକୁ ଦେଇଥାଏ।"},
                 {q: "କେଉଁ ଲଜିକ୍ ଗେଟ୍ ସାର୍ବଜନୀନ ଗେଟ୍ ଭାବରେ ଜଣାଶୁଣା?", o: ["AND ଗେଟ୍", "OR ଗେଟ୍", "NOT ଗେଟ୍", "NAND ଗେଟ୍"], a: "NAND ଗେଟ୍", e: "NAND ଏବଂ NOR ଉଭୟ ଗେଟ୍କୁ ସାର୍ବଜନୀନ ଗେଟ୍ କୁହାଯାଏ କାରଣ ଅନ୍ୟ କୌଣସି ଲଜିକ୍ ଗେଟ୍ (ଯେପରିକି AND, OR, NOT) କେବଳ NAND ଗେଟ୍ ବା କେବଳ NOR ଗେଟ୍ ବ୍ୟବହାର କରି ତିଆରି କରାଯାଇପାରିବ।"}
             ],
-            medium: [/* 9 questions */],
-            hard: [/* 9 questions */]
+            medium: [
+                {q: "ଏକ ଜେନର୍ ଡାୟୋଡ୍ ମୁଖ୍ୟତଃ କ'ଣ ଭାବରେ ବ୍ୟବହୃତ ହୁଏ?", o: ["ରେକ୍ଟିଫାୟର୍", "ଆମ୍ପ୍ଲିଫାୟର୍", "ଭୋଲଟେଜ୍ ରେଗୁଲେଟର୍", "ଅସିଲେଟର୍"], a: "ଭୋଲଟେଜ୍ ରେଗୁଲେଟର୍", e: "ଏକ ଜେନର୍ ଡାୟୋଡ୍ ରିଭର୍ସ ବ୍ରେକଡାଉନ୍ ଅଞ୍ଚଳରେ କାର୍ଯ୍ୟ କରିବା ପାଇଁ ଡିଜାଇନ୍ କରାଯାଇଛି, ଏହା ଉପରେ ଏକ ପ୍ରାୟ ସ୍ଥିର ଭୋଲଟେଜ୍ ବଜାୟ ରଖିଥାଏ, ଯାହା ଏହାକୁ ଭୋଲଟେଜ୍ ନିୟନ୍ତ୍ରଣ ପାଇଁ ଆଦର୍ଶ କରିଥାଏ।"},
+                {q: "ଏକ କମନ୍-ଏମିଟର୍ (CE) ଆମ୍ପ୍ଲିଫାୟରରେ, ଆଉଟପୁଟ୍ ଭୋଲଟେଜ୍...", o: ["ଇନପୁଟ୍ ସହିତ ସମାନ କଳାରେ ଥାଏ", "ଇନପୁଟ୍ ଠାରୁ 180° କଳା ବାହାରେ ଥାଏ", "ଇନପୁଟ୍ ଠାରୁ 90° କଳା ବାହାରେ ଥାଏ", "ଇନପୁଟ୍ ଠାରୁ 45° କଳା ବାହାରେ ଥାଏ"], a: "ଇନପୁଟ୍ ଠାରୁ 180° କଳା ବାହାରେ ଥାଏ", e: "ଏକ CE ବିନ୍ୟାସରେ, ବେସ୍ ସ୍ରୋତରେ ଏକ ଛୋଟ ବୃଦ୍ଧି କଲେକ୍ଟର ସ୍ରୋତରେ ଏକ ବଡ଼ ବୃଦ୍ଧିର କାରଣ ହୁଏ, ଯାହା ବଦଳରେ କଲେକ୍ଟର ପ୍ରତିରୋଧକରେ ଭୋଲଟେଜରେ ଏକ ବଡ଼ ହ୍ରାସର କାରଣ ହୁଏ। ଏହା ଏକ ଓଲଟା ବା 180° କଳା-ବିସ୍ଥାପିତ ଆଉଟପୁଟ୍ ସଙ୍କେତରେ ପରିଣତ ହୁଏ।"},
+                {q: "ଏକ ରେକ୍ଟିଫାୟରର କାର୍ଯ୍ୟ କ'ଣ?", o: ["AC କୁ DC ରେ ପରିବର୍ତ୍ତନ କରିବା", "DC କୁ AC ରେ ପରିବର୍ତ୍ତନ କରିବା", "ସଙ୍କେତକୁ ବଢାଇବା", "ଭୋଲଟେଜ୍ ନିୟନ୍ତ୍ରଣ କରିବା"], a: "AC କୁ DC ରେ ପରିବର୍ତ୍ତନ କରିବା", e: "ଏକ ରେକ୍ଟିଫାୟର୍ ହେଉଛି ଏକ ବୈଦ୍ୟୁତିକ ଉପକରଣ ଯାହା ବିକଳ୍ପୀ ସ୍ରୋତ (AC), ଯାହା ସମୟ ସମୟରେ ଦିଗ ବଦଳାଏ, କୁ ପ୍ରତ୍ୟକ୍ଷ ସ୍ରୋତ (DC) ରେ ପରିବର୍ତ୍ତନ କରେ, ଯାହା କେବଳ ଗୋଟିଏ ଦିଗରେ ପ୍ରବାହିତ ହୁଏ।"},
+                {q: "ଏକ NOR ଗେଟ୍ ପାଇଁ ବୁଲିୟନ୍ ଅଭିବ୍ୟକ୍ତି ହେଉଛି...", o: ["Y = A . B", "Y = A + B", "Y = (A + B)'", "Y = (A . B)'"], a: "Y = (A + B)'", e: "ଏକ NOR ଗେଟ୍ ହେଉଛି ଏକ OR ଗେଟ୍ ଯାହା ପରେ ଏକ NOT ଗେଟ୍ ଥାଏ। OR ପାଇଁ ଅଭିବ୍ୟକ୍ତି A + B, ଏବଂ NOT ଅପରେସନ୍ ପ୍ରାଇମ୍ (') ଦ୍ୱାରା ଦର୍ଶାଯାଏ, ତେଣୁ NOR ଅଭିବ୍ୟକ୍ତି Y = (A + B)'।"},
+                {q: "ଏକ LED କେଉଁ ପ୍ରକାରର ଉପକରଣ?", o: ["ଫଟୋଭୋଲ୍ଟାଇକ୍ ସେଲ୍", "ଅତ୍ୟଧିକ ଡୋପ୍ ହୋଇଥିବା p-n ଜଙ୍କସନ୍", "ଧାତୁ-ଅର୍ଦ୍ଧପରିବାହୀ ଜଙ୍କସନ୍", "ଆନ୍ତରିକ ଅର୍ଦ୍ଧପରିବାହୀ"], a: "ଅତ୍ୟଧିକ ଡୋପ୍ ହୋଇଥିବା p-n ଜଙ୍କସନ୍", e: "ଏକ ଆଲୋକ ଉତ୍ସର୍ଜନକାରୀ ଡାୟୋଡ୍ (LED) ହେଉଛି ଏକ ଅତ୍ୟଧିକ ଡୋପ୍ ହୋଇଥିବା p-n ଜଙ୍କସନ୍ ଡାୟୋଡ୍ ଯାହା ଫରୱାର୍ଡ ବାୟାସରେ, ସ୍ୱତଃପ୍ରବୃତ୍ତ ବିକିରଣ ନିର୍ଗତ କରେ। ରଙ୍ଗ ବ୍ୟବହୃତ ଅର୍ଦ୍ଧପରିବାହୀ ପଦାର୍ଥ ଉପରେ ନିର୍ଭର କରେ।"},
+                {q: "ଏକ ଟ୍ରାନଜିଷ୍ଟରର ସ୍ରୋତ ଲାଭ (β) କିପରି ବ୍ୟାଖ୍ୟା କରାଯାଏ...", o: ["Ic / Ib", "Ic / Ie", "Ie / Ib", "Ib / Ic"], a: "Ic / Ib", e: "ଏକ କମନ୍-ଏମିଟର୍ ବିନ୍ୟାସରେ, DC ସ୍ରୋତ ଲାଭ, ବିଟା (β), ହେଉଛି କଲେକ୍ଟର ସ୍ରୋତ (Ic) ଏବଂ ବେସ୍ ସ୍ରୋତ (Ib) ର ଅନୁପାତ।"},
+                {q: "ଏକ ଫଟୋଡାୟୋଡ୍ କେଉଁଥିରେ କାର୍ଯ୍ୟକାରୀ ହୁଏ...", o: ["ଫରୱାର୍ଡ ବାୟାସରେ", "ରିଭର୍ସ ବାୟାସରେ", "କୌଣସି ବାୟାସରେ ନୁହେଁ", "ବ୍ରେକଡାଉନ୍ ଅଞ୍ଚଳରେ"], a: "ରିଭର୍ସ ବାୟାସରେ", e: "ଫଟୋଡାୟୋଡ୍ ଗୁଡିକ ରିଭର୍ସ ବାୟାସରେ କାର୍ଯ୍ୟକାରୀ ହୁଅନ୍ତି କାରଣ ରିଭର୍ସ ସ୍ରୋତ ଏହା ଉପରେ ପଡୁଥିବା ଆଲୋକର ତୀବ୍ରତା ସହିତ ସିଧାସଳଖ ଆନୁପାତିକ, ଯାହା ଏହାକୁ ଏକ ଭଲ ଆଲୋକ ସୂଚକ କରିଥାଏ।"},
+                {q: "କେଉଁ ପ୍ରକାରର ରେକ୍ଟିଫାୟରର ଆଉଟପୁଟରେ ସର୍ବାଧିକ ପରିମାଣର ରିପଲ୍ ଥାଏ?", o: ["ଫୁଲ୍-ୱେଭ୍ ରେକ୍ଟିଫାୟର୍", "ବ୍ରିଜ୍ ରେକ୍ଟିଫାୟର୍", "ହାଫ୍-ୱେଭ୍ ରେକ୍ଟିଫାୟର୍", "ଭୋଲଟେଜ୍ ଡବଲର୍"], a: "ହାଫ୍-ୱେଭ୍ ରେକ୍ଟିଫାୟର୍", e: "ଏକ ହାଫ୍-ୱେଭ୍ ରେକ୍ଟିଫାୟର୍ କେବଳ AC ଚକ୍ରର ଗୋଟିଏ ଅର୍ଦ୍ଧେକ ବ୍ୟବହାର କରେ, ଯାହା DC ଆଉଟପୁଟରେ ପଲ୍ସଗୁଡିକ ମଧ୍ୟରେ ଏକ ବଡ଼ ବ୍ୟବଧାନ ସୃଷ୍ଟି କରେ। ଏହା ଫୁଲ୍-ୱେଭ୍ ରେକ୍ଟିଫାୟର୍ ତୁଳନାରେ ଏକ ଉଚ୍ଚ ରିପଲ୍ ଫ୍ୟାକ୍ଟର୍ ସୃଷ୍ଟି କରେ।"},
+                {q: "ସାଧାରଣ ତାପମାତ୍ରାରେ ଜର୍ମାନିୟମ୍ (Ge) ପାଇଁ ନିଷିଦ୍ଧ ଶକ୍ତି ବ୍ୟବଧାନ ପ୍ରାୟ...", o: ["1.1 eV", "0.72 eV", "5.4 eV", "0.3 eV"], a: "0.72 eV", e: "ଜର୍ମାନିୟମ୍ ପାଇଁ ବ୍ୟାଣ୍ଡ୍ ଗ୍ୟାପ୍ ପ୍ରାୟ 0.72 eV, ଯାହା ସିଲିକନ୍ (ପ୍ରାୟ 1.1 eV) ଠାରୁ ଛୋଟ। ଏହା Ge କୁ ଅଧିକ ପରିବାହୀ କରେ କିନ୍ତୁ ତାପମାତ୍ରା ପରିବର୍ତ୍ତନ ପ୍ରତି ଅଧିକ ସମ୍ବେଦନଶୀଳ ମଧ୍ୟ କରେ।"}
+            ],
+            hard: [
+                {q: "ଏକ ଅସିଲେଟର୍ ହେଉଛି ଏକ ଆମ୍ପ୍ଲିଫାୟର୍ ଯେଉଁଥିରେ...", o: ["ସକାରାତ୍ମକ ଫିଡବ୍ୟାକ୍ ଥାଏ", "ନକାରାତ୍ମକ ଫିଡବ୍ୟାକ୍ ଥାଏ", "କୌଣସି ଫିଡବ୍ୟାକ୍ ନଥାଏ", "ଉଭୟ ସକାରାତ୍ମକ ଏବଂ ନକାରାତ୍ମକ ଫିଡବ୍ୟାକ୍ ଥାଏ"], a: "ସକାରାତ୍ମକ ଫିଡବ୍ୟାକ୍ ଥାଏ", e: "ଏକ ଅସିଲେଟର୍ କୌଣସି ଇନପୁଟ୍ ସଙ୍କେତ ବିନା ଏକ ଆବର୍ତ୍ତକ ତରଙ୍ଗ ସୃଷ୍ଟି କରେ। ଏହା ଅସିଲେସନ୍ ବଜାୟ ରଖିବା ପାଇଁ ସକାରାତ୍ମକ ଫିଡବ୍ୟାକ୍ ବ୍ୟବହାର କରେ, ଯେଉଁଠାରେ ଆଉଟପୁଟ୍ ସଙ୍କେତର ଏକ ଅଂଶ ଇନପୁଟକୁ ସମାନ କଳାରେ ଫେରସ୍ତ କରାଯାଏ।"},
+                {q: "ଦିଆଯାଇଥିବା ଲଜିକ୍ ସର୍କିଟର ଆଉଟପୁଟ୍ (ଏକ ଇନପୁଟ୍ A କୁ ଏକ ଦୁଇ-ଇନପୁଟ୍ NAND ଗେଟକୁ ଦିଆଯାଏ ଯାହାର ଇନପୁଟ୍ ସର୍ଟ୍ କରାଯାଇଛି) ହେଉଛି:", o: ["A", "1", "0", "A' (NOT A)"], a: "A' (NOT A)", e: "ଯେତେବେଳେ ଏକ NAND ଗେଟର ଉଭୟ ଇନପୁଟ୍ ଏକତ୍ର ବନ୍ଧା ହୁଏ (A), ଅଭିବ୍ୟକ୍ତି (A . A)' ହୋଇଯାଏ। ବୁଲିୟନ୍ ଆଲଜେବ୍ରା ଅନୁଯାୟୀ, A . A = A, ତେଣୁ ଅଭିବ୍ୟକ୍ତି A' କୁ ସରଳୀକୃତ ହୁଏ। ଏହାର ଅର୍ଥ NAND ଗେଟ୍ ଏକ NOT ଗେଟ୍ ଭାବରେ କାର୍ଯ୍ୟ କରେ।"},
+                {q: "ଏକ ଫୁଲ୍-ୱେଭ୍ ରେକ୍ଟିଫାୟରରେ, ଯଦି ଇନପୁଟ୍ ଆବୃତ୍ତି 50 Hz ହୁଏ, ତେବେ ଆଉଟପୁଟ୍ ରିପଲ୍ ଆବୃତ୍ତି ହେଉଛି...", o: ["50 Hz", "25 Hz", "100 Hz", "200 Hz"], a: "100 Hz", e: "ଏକ ଫୁଲ୍-ୱେଭ୍ ରେକ୍ଟିଫାୟର୍ AC ଇନପୁଟର ଋଣାତ୍ମକ ଅର୍ଦ୍ଧ-ଚକ୍ରକୁ ଓଲଟାଇ ଦିଏ। ଏହାର ଅର୍ଥ ପ୍ରତ୍ୟେକ ଗୋଟିଏ ଇନପୁଟ୍ ଚକ୍ର ପାଇଁ ଦୁଇଟି ଆଉଟପୁଟ୍ ପଲ୍ସ ଅଛି। ତେଣୁ, ରିପଲ୍ ଆବୃତ୍ତି ଇନପୁଟ୍ ଆବୃତ୍ତିର ଦ୍ୱିଗୁଣ (2 * 50 Hz = 100 Hz)।"},
+                {q: "ଏକ ଟ୍ରାନଜିଷ୍ଟରର ଟ୍ରାନ୍ସକଣ୍ଡକ୍ଟାନ୍ସ (gm) କାହାର ମାପ...", o: ["ଇନପୁଟ୍ ସ୍ରୋତ ଉପରେ ଇନପୁଟ୍ ଭୋଲଟେଜ୍ ନିୟନ୍ତ୍ରଣ", "ଇନପୁଟ୍ ସ୍ରୋତ ଉପରେ ଆଉଟପୁଟ୍ ଭୋଲଟେଜ୍ ନିୟନ୍ତ୍ରଣ", "ଆଉଟପୁଟ୍ ସ୍ରୋତ ଉପରେ ଇନପୁଟ୍ ଭୋଲଟେଜ୍ ନିୟନ୍ତ୍ରଣ", "ଆଉଟପୁଟ୍ ସ୍ରୋତ ଉପରେ ଆଉଟପୁଟ୍ ଭୋଲଟେଜ୍ ନିୟନ୍ତ୍ରଣ"], a: "ଆଉଟପୁଟ୍ ସ୍ରୋତ ଉପରେ ଇନପୁଟ୍ ଭୋଲଟେଜ୍ ନିୟନ୍ତ୍ରଣ", e: "ଟ୍ରାନ୍ସକଣ୍ଡକ୍ଟାନ୍ସ (gm) ହେଉଛି ଆଉଟପୁଟ୍ ସ୍ରୋତରେ ପରିବର୍ତ୍ତନ (ଯଥା, କଲେକ୍ଟର ସ୍ରୋତ) ଏବଂ ଇନପୁଟ୍ ଭୋଲଟେଜରେ ପରିବର୍ତ୍ତନ (ଯଥା, ବେସ୍-ଏମିଟର୍ ଭୋଲଟେଜ୍) ର ଅନୁପାତ। ଏହା ବର୍ଣ୍ଣନା କରେ ଯେ ଇନପୁଟ୍ ଭୋଲଟେଜ୍ ଆଉଟପୁଟ୍ ସ୍ରୋତକୁ କେତେ ପ୍ରଭାବଶାଳୀ ଭାବରେ ନିୟନ୍ତ୍ରଣ କରେ।"},
+                {q: "ଏକ BJT ରେ ବେସ୍ ଅଞ୍ଚଳର ମୁଖ୍ୟ କାର୍ଯ୍ୟ କ'ଣ?", o: ["ବହୁସଂଖ୍ୟକ ବାହକଙ୍କୁ ଏମିଟରରୁ କଲେକ୍ଟରକୁ ପ୍ରବାହିତ ହେବାକୁ ଦେବା", "ସ୍ରୋତର ପ୍ରବାହକୁ ବନ୍ଦ କରିବା", "ଏମିଟରରୁ କଲେକ୍ଟରକୁ ସଂଖ୍ୟାଲଘୁ ବାହକଙ୍କ ପ୍ରବାହକୁ ନିୟନ୍ତ୍ରଣ କରିବା", "ଚାର୍ଜ ବାହକ ଉତ୍ସର୍ଜନ କରିବା"], a: "ଏମିଟରରୁ କଲେକ୍ଟରକୁ ସଂଖ୍ୟାଲଘୁ ବାହକଙ୍କ ପ୍ରବାହକୁ ନିୟନ୍ତ୍ରଣ କରିବା", e: "ବେସ୍ ଏକ ବହୁତ ପତଳା, ହାଲୁକା ଡୋପ୍ ହୋଇଥିବା ଅଞ୍ଚଳ। ବେସରେ ଏକ ଛୋଟ ସ୍ରୋତ ଏମିଟରରୁ କଲେକ୍ଟରକୁ ଏକ ବଡ଼ ସ୍ରୋତ ପ୍ରବାହକୁ ନିୟନ୍ତ୍ରଣ କରେ, ଯାହା ମୂଳତଃ ଚାର୍ଜ ବାହକଙ୍କ ପାଇଁ ଏକ ଭାଲ୍ଭ ଭାବରେ କାର୍ଯ୍ୟ କରେ।"},
+                {q: "ଡି ମୋର୍ଗାନଙ୍କ ଥିଓରେମ୍ ଅନୁଯାୟୀ, (A + B)' କାହା ସହିତ ସମାନ...", o: ["A' + B'", "A' . B'", "A . B", "(A' . B')'"], a: "A' . B'", e: "ଡି ମୋର୍ଗାନଙ୍କ ପ୍ରଥମ ଥିଓରେମ୍ କୁହେ ଯେ ଏକ ଯୋଗର ପରିପୂରକ ପରିପୂରକଗୁଡ଼ିକର ଗୁଣଫଳ ସହିତ ସମାନ। ଏହିପରି, (A + B)' = A' . B'।"},
+                {q: "ଏକ ଟ୍ରାନଜିଷ୍ଟରର ସ୍ରୋତ ଲାଭ (β) 100 ଅଟେ। ଯଦି ବେସ୍ ସ୍ରୋତ 20 μA ହୁଏ, ତେବେ କଲେକ୍ଟର ସ୍ରୋତ କେତେ?", o: ["2000 mA", "2 mA", "0.2 mA", "20 mA"], a: "2 mA", e: "ସ୍ରୋତ ଲାଭ β = Ic / Ib। ତେଣୁ, କଲେକ୍ଟର ସ୍ରୋତ Ic = β * Ib। Ic = 100 * 20 μA = 2000 μA = 2 mA।"},
+                {q: "ଅର୍ଦ୍ଧପରିବାହୀରେ 'ଡୋପିଂ କ୍ଷତିପୂରଣ' କ'ଣ?", o: ["ଉଭୟ ଡୋନର୍ ଏବଂ ଆକ୍ସେପ୍ଟର୍ ଅପମିଶ୍ରଣ ମିଶାଇବା", "ସମସ୍ତ ଅପମିଶ୍ରଣକୁ ହଟାଇବା", "ତାପମାତ୍ରା ବୃଦ୍ଧି କରିବା", "ଏକ ଚୁମ୍ବକୀୟ କ୍ଷେତ୍ର ବ୍ୟବହାର କରିବା"], a: "ଉଭୟ ଡୋନର୍ ଏବଂ ଆକ୍ସେପ୍ଟର୍ ଅପମିଶ୍ରଣ ମିଶାଇବା", e: "କ୍ଷତିପୂରଣ ହେଉଛି ଏକ p-ପ୍ରକାରର ଅର୍ଦ୍ଧପରିବାହୀରେ ଡୋନର୍ ଅପମିଶ୍ରଣ ମିଶାଇବା କିମ୍ବା ଏକ n-ପ୍ରକାରର ଅର୍ଦ୍ଧପରିବାହୀରେ ଆକ୍ସେପ୍ଟର୍ ଅପମିଶ୍ରଣ ମିଶାଇବାର ପ୍ରକ୍ରିୟା। ପଦାର୍ଥ p-ପ୍ରକାର କିମ୍ବା n-ପ୍ରକାର ରହେ କିନ୍ତୁ ଏହାର ବହୁସଂଖ୍ୟକ ବାହକ ଏକାଗ୍ରତା ହ୍ରାସ ପାଏ।"},
+                {q: "ଏକ ଲଜିକ୍ ସର୍କିଟ୍ ଯାହା ଏକ ବିଟ୍ ସୂଚନା ସଂରକ୍ଷଣ କରିପାରେ, ତାହାକୁ କୁହାଯାଏ...", o: ["ମଲ୍ଟିପ୍ଲେକ୍ସର୍", "ଏନକୋଡର୍", "ଫ୍ଲିପ୍-ଫ୍ଲପ୍", "ଡିକୋଡର୍"], a: "ଫ୍ଲିପ୍-ଫ୍ଲପ୍", e: "ଏକ ଫ୍ଲିପ୍-ଫ୍ଲପ୍ (କିମ୍ବା ଲ୍ୟାଚ୍) ହେଉଛି ଏକ ବାଇଷ୍ଟେବଲ୍ ମଲ୍ଟିଭାଇବ୍ରେଟର୍। ଏହାର ଦୁଇଟି ସ୍ଥିର ଅବସ୍ଥା ଅଛି ଏବଂ ଏହାକୁ ଅବସ୍ଥା ସୂଚନା ସଂରକ୍ଷଣ କରିବା ପାଇଁ ବ୍ୟବହାର କରାଯାଇପାରେ, ଯାହା ଏହାକୁ ଡିଜିଟାଲ୍ ମେମୋରୀର ମୌଳିକ ନିର୍ମାଣ ବ୍ଲକ୍ କରିଥାଏ।"}
+            ]
         }
     }
 };
 
-// Placeholder for medium and hard questions (copying easy for demonstration)
-['en', 'hi', 'or'].forEach(lang => {
-    ['emi', 'semiconductors'].forEach(domain => {
-        quizDataSource[lang][domain].medium = [...quizDataSource[lang][domain].easy].sort(() => 0.5 - Math.random());
-        quizDataSource[lang][domain].hard = [...quizDataSource[lang][domain].easy].sort(() => 0.5 - Math.random());
-    });
-});
-
 </script>
 </body>
 </html>
+
